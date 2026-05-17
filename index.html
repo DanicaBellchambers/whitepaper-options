@@ -466,6 +466,161 @@ footer{background:var(--navy);color:rgba(255,255,255,.7);padding:3rem 0 1.5rem}
       <p>In an era defined by rapid market shifts and the emergence of Generative AI and agentic workflows, being merely "data-driven" is no longer a competitive advantage; it is an operational liability. The modern enterprise must transition toward becoming <strong style="color:var(--navy)">intelligence-driven</strong> — codifying organisational knowledge, automating complex decisioning paths, and feeding high-fidelity, real-time data directly into machine learning models and AI agents.</p>
     </div>
 
+    <div class="arch-diagram zoomable fi" data-title="From Data-Driven to Intelligence-Driven">
+      <span class="diagram-zoom-hint">⤢ Click to zoom</span>
+      <svg viewBox="0 0 760 440" xmlns="http://www.w3.org/2000/svg" font-family="'Open Sans',sans-serif" role="img" aria-label="Comparison diagram contrasting the linear, human-bottlenecked data-driven paradigm with the continuous, autonomous intelligence-driven loop">
+        <defs>
+          <marker id="ar-grey" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L0,8 L8,4 z" fill="#9898b8"/></marker>
+          <marker id="ar-blue" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L0,8 L8,4 z" fill="#008fe2"/></marker>
+          <linearGradient id="paradigmOld" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#f5f5f9"/>
+            <stop offset="100%" stop-color="#fff"/>
+          </linearGradient>
+          <linearGradient id="paradigmNew" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#e0f2fd"/>
+            <stop offset="100%" stop-color="#fff"/>
+          </linearGradient>
+          <radialGradient id="loopGlow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#008fe2" stop-opacity="0.15"/>
+            <stop offset="100%" stop-color="#008fe2" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+
+        <text x="380" y="22" text-anchor="middle" font-size="10" font-family="'Montserrat',sans-serif" fill="#9898b8" letter-spacing="1.8" font-weight="700">THE PARADIGM SHIFT</text>
+
+        <!-- LEFT PANEL: Data-Driven -->
+        <g>
+          <rect x="20" y="42" width="350" height="380" rx="8" fill="url(#paradigmOld)" stroke="#dde2ec" stroke-width="1.5"/>
+          <rect x="20" y="42" width="350" height="36" rx="8" fill="#5a5a80"/>
+          <rect x="20" y="66" width="350" height="14" fill="#5a5a80"/>
+          <text x="38" y="65" font-size="10" font-family="'Montserrat',sans-serif" fill="rgba(255,255,255,.65)" letter-spacing="1.5" font-weight="700">YESTERDAY</text>
+          <text x="195" y="65" text-anchor="middle" font-size="14" font-family="'Montserrat',sans-serif" fill="#fff" font-weight="800">Data-Driven</text>
+
+          <text x="195" y="103" text-anchor="middle" font-size="9.5" fill="#5a5a80" letter-spacing=".5">Linear · Retrospective · Human-bottlenecked</text>
+
+          <!-- Linear chain -->
+          <g transform="translate(0,128)">
+            <!-- Step 1: Data -->
+            <rect x="42" y="0" width="84" height="44" rx="4" fill="#fff" stroke="#c8c8dc" stroke-width="1"/>
+            <text x="84" y="18" text-anchor="middle" font-size="9" font-family="'Montserrat',sans-serif" fill="#9898b8" letter-spacing="1" font-weight="700">01</text>
+            <text x="84" y="33" text-anchor="middle" font-size="10.5" fill="#2e2e50" font-weight="700">Data</text>
+
+            <line x1="128" y1="22" x2="162" y2="22" stroke="#9898b8" stroke-width="1.5" marker-end="url(#ar-grey)"/>
+
+            <!-- Step 2: Dashboard -->
+            <rect x="164" y="0" width="84" height="44" rx="4" fill="#fff" stroke="#c8c8dc" stroke-width="1"/>
+            <text x="206" y="18" text-anchor="middle" font-size="9" font-family="'Montserrat',sans-serif" fill="#9898b8" letter-spacing="1" font-weight="700">02</text>
+            <text x="206" y="33" text-anchor="middle" font-size="10.5" fill="#2e2e50" font-weight="700">Dashboard</text>
+
+            <line x1="250" y1="22" x2="284" y2="22" stroke="#9898b8" stroke-width="1.5" marker-end="url(#ar-grey)"/>
+
+            <!-- Step 3: Human -->
+            <rect x="286" y="0" width="60" height="44" rx="4" fill="#fff7e0" stroke="#e8a838" stroke-width="1.5"/>
+            <text x="316" y="18" text-anchor="middle" font-size="9" font-family="'Montserrat',sans-serif" fill="#b8841a" letter-spacing="1" font-weight="700">03</text>
+            <text x="316" y="33" text-anchor="middle" font-size="10.5" fill="#704a08" font-weight="700">Human</text>
+          </g>
+
+          <!-- Bottleneck callout -->
+          <g transform="translate(280,184)">
+            <path d="M0,0 L18,-8 L18,-3 L36,-3 L36,3 L18,3 L18,8 Z" fill="#e8a838" opacity="0.85"/>
+            <text x="46" y="3" font-size="9" fill="#b8841a" font-weight="700" font-style="italic">Bottleneck</text>
+          </g>
+
+          <!-- Step 4: Decide -->
+          <g transform="translate(0,210)">
+            <line x1="316" y1="0" x2="316" y2="20" stroke="#9898b8" stroke-width="1.5" marker-end="url(#ar-grey)"/>
+            <rect x="266" y="22" width="100" height="36" rx="4" fill="#fff" stroke="#c8c8dc" stroke-width="1"/>
+            <text x="316" y="38" text-anchor="middle" font-size="9" font-family="'Montserrat',sans-serif" fill="#9898b8" letter-spacing="1" font-weight="700">04</text>
+            <text x="316" y="51" text-anchor="middle" font-size="10.5" fill="#2e2e50" font-weight="700">Decide &amp; Act</text>
+          </g>
+
+          <!-- Attributes -->
+          <g transform="translate(42,300)">
+            <text x="0" y="0" font-size="10" fill="#2e2e50" font-weight="700">Cadence</text>
+            <text x="304" y="0" text-anchor="end" font-size="10" fill="#5a5a80">Weekly / Monthly</text>
+            <line x1="0" y1="10" x2="304" y2="10" stroke="#e8e8f0" stroke-width="1"/>
+
+            <text x="0" y="28" font-size="10" fill="#2e2e50" font-weight="700">Latency</text>
+            <text x="304" y="28" text-anchor="end" font-size="10" fill="#5a5a80">Hours → Days</text>
+            <line x1="0" y1="38" x2="304" y2="38" stroke="#e8e8f0" stroke-width="1"/>
+
+            <text x="0" y="56" font-size="10" fill="#2e2e50" font-weight="700">Output</text>
+            <text x="304" y="56" text-anchor="end" font-size="10" fill="#5a5a80">Descriptive reports</text>
+            <line x1="0" y1="66" x2="304" y2="66" stroke="#e8e8f0" stroke-width="1"/>
+
+            <text x="0" y="84" font-size="10" fill="#2e2e50" font-weight="700">Limit</text>
+            <text x="304" y="84" text-anchor="end" font-size="10" fill="#5a5a80">Human interpretation</text>
+          </g>
+        </g>
+
+        <!-- Arrow between panels -->
+        <g transform="translate(380,225)">
+          <circle cx="0" cy="0" r="22" fill="#070720"/>
+          <path d="M-7,-6 L5,0 L-7,6 Z" fill="#008fe2"/>
+        </g>
+
+        <!-- RIGHT PANEL: Intelligence-Driven -->
+        <g>
+          <rect x="390" y="42" width="350" height="380" rx="8" fill="url(#paradigmNew)" stroke="#008fe2" stroke-width="1.5"/>
+          <rect x="390" y="42" width="350" height="36" rx="8" fill="#070720"/>
+          <rect x="390" y="66" width="350" height="14" fill="#070720"/>
+          <text x="408" y="65" font-size="10" font-family="'Montserrat',sans-serif" fill="#008fe2" letter-spacing="1.5" font-weight="700">TOMORROW</text>
+          <text x="565" y="65" text-anchor="middle" font-size="14" font-family="'Montserrat',sans-serif" fill="#fff" font-weight="800">Intelligence-Driven</text>
+
+          <text x="565" y="103" text-anchor="middle" font-size="9.5" fill="#005a94" letter-spacing=".5">Continuous · Predictive · Autonomous</text>
+
+          <!-- Circular loop -->
+          <g transform="translate(565,228)">
+            <circle cx="0" cy="0" r="92" fill="url(#loopGlow)"/>
+
+            <!-- Loop arrows (4 arcs forming a circle) -->
+            <path d="M 0,-72 A 72,72 0 0,1 62.4,-36" fill="none" stroke="#008fe2" stroke-width="2" marker-end="url(#ar-blue)"/>
+            <path d="M 62.4,-36 A 72,72 0 0,1 62.4,36" fill="none" stroke="#008fe2" stroke-width="2" marker-end="url(#ar-blue)"/>
+            <path d="M 62.4,36 A 72,72 0 0,1 -62.4,36" fill="none" stroke="#008fe2" stroke-width="2" marker-end="url(#ar-blue)"/>
+            <path d="M -62.4,36 A 72,72 0 0,1 0,-72" fill="none" stroke="#008fe2" stroke-width="2" marker-end="url(#ar-blue)"/>
+
+            <!-- Node 1: Sense -->
+            <circle cx="0" cy="-72" r="20" fill="#fff" stroke="#008fe2" stroke-width="2"/>
+            <text x="0" y="-69" text-anchor="middle" font-size="8" font-family="'Montserrat',sans-serif" fill="#008fe2" font-weight="700">SENSE</text>
+            <text x="0" y="-58" text-anchor="middle" font-size="7.5" fill="#5a5a80">streaming</text>
+
+            <!-- Node 2: Reason -->
+            <circle cx="72" cy="0" r="20" fill="#fff" stroke="#008fe2" stroke-width="2"/>
+            <text x="72" y="-3" text-anchor="middle" font-size="8" font-family="'Montserrat',sans-serif" fill="#008fe2" font-weight="700">REASON</text>
+            <text x="72" y="8" text-anchor="middle" font-size="7.5" fill="#5a5a80">AI / ML</text>
+
+            <!-- Node 3: Act -->
+            <circle cx="0" cy="72" r="20" fill="#070720"/>
+            <text x="0" y="69" text-anchor="middle" font-size="8" font-family="'Montserrat',sans-serif" fill="#008fe2" font-weight="700">ACT</text>
+            <text x="0" y="80" text-anchor="middle" font-size="7.5" fill="rgba(255,255,255,.7)">agents</text>
+
+            <!-- Node 4: Learn -->
+            <circle cx="-72" cy="0" r="20" fill="#fff" stroke="#008fe2" stroke-width="2"/>
+            <text x="-72" y="-3" text-anchor="middle" font-size="8" font-family="'Montserrat',sans-serif" fill="#008fe2" font-weight="700">LEARN</text>
+            <text x="-72" y="8" text-anchor="middle" font-size="7.5" fill="#5a5a80">feedback</text>
+
+            <!-- Centre label -->
+            <text x="0" y="-2" text-anchor="middle" font-size="9" font-family="'Montserrat',sans-serif" fill="#070720" font-weight="800" letter-spacing="1">CONTINUOUS</text>
+            <text x="0" y="12" text-anchor="middle" font-size="9" font-family="'Montserrat',sans-serif" fill="#070720" font-weight="800" letter-spacing="1">LOOP</text>
+          </g>
+
+          <!-- Attributes -->
+          <g transform="translate(412,355)">
+            <text x="0" y="0" font-size="10" fill="#070720" font-weight="700">Cadence</text>
+            <text x="304" y="0" text-anchor="end" font-size="10" fill="#005a94" font-weight="600">Real-time</text>
+            <line x1="0" y1="10" x2="304" y2="10" stroke="#cfe5f4" stroke-width="1"/>
+
+            <text x="0" y="28" font-size="10" fill="#070720" font-weight="700">Latency</text>
+            <text x="304" y="28" text-anchor="end" font-size="10" fill="#005a94" font-weight="600">&lt; 200ms p99</text>
+            <line x1="0" y1="38" x2="304" y2="38" stroke="#cfe5f4" stroke-width="1"/>
+
+            <text x="0" y="56" font-size="10" fill="#070720" font-weight="700">Output</text>
+            <text x="304" y="56" text-anchor="end" font-size="10" fill="#005a94" font-weight="600">Autonomous decisions</text>
+          </g>
+        </g>
+      </svg>
+    </div>
+
     <div class="pull-quote fi">
       <p class="pull-quote-text">Being "data-driven" is no longer a competitive advantage. It is an operational liability.</p>
       <p class="pull-quote-attr">— Executive Summary · Section 1</p>
