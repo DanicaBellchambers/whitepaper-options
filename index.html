@@ -13,7 +13,7 @@
   --blue-lt:#e0f2fd;--blue-pale:#f0f8fe;
   --navy:#070720;--navy-mid:#0e0e35;--navy-soft:#1a1a50;
   --ink:#070720;--ink-mid:#2e2e50;--ink-muted:#5a5a80;--ink-faint:#9898b8;
-  --paper:#ffffff;--paper-mid:#f4f7fb;--paper-tint:#eef4fc;c
+  --paper:#ffffff;--paper-mid:#f4f7fb;--paper-tint:#eef4fc;
   --rule:#dde8f5;
   --green:#007a55;--green-lt:#e0f4ee;
   --amber:#b06800;--amber-lt:#fef3e0;
@@ -357,13 +357,126 @@ footer{background:var(--navy);color:rgba(255,255,255,.7);padding:3rem 0 1.5rem}
 }
 
 @media print{
-  nav,#prog,.fab,#diagModal,.hamburger,.mobile-menu{display:none!important}
+  nav,#prog,.fab,#diagModal,.hamburger,.mobile-menu,.view-switch{display:none!important}
   main{padding-top:0}
   .section{padding:1.5rem 0;page-break-inside:avoid}
   .fi{opacity:1!important;transform:none!important}
   body{font-size:11pt}
   .arch-diagram,.maturity-wrap,.stack-wrap{break-inside:avoid}
   a{color:inherit;text-decoration:none}
+  #view-gantt{display:none!important}
+}
+
+/* === VIEW SWITCH === */
+.view-switch{display:flex;background:rgba(255,255,255,.06);border-radius:var(--r);padding:3px;gap:2px;flex-shrink:0;margin-left:auto;margin-right:.75rem}
+.vs-btn{font-family:'Montserrat',sans-serif;font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.55);background:transparent;border:0;padding:7px 14px;border-radius:6px;cursor:pointer;transition:all .2s;white-space:nowrap}
+.vs-btn:hover{color:#fff}
+.vs-btn.active{background:var(--blue);color:var(--navy)}
+@media (max-width:980px){.view-switch{padding:2px}.vs-btn{padding:6px 10px;font-size:10px}}
+
+#view-gantt{display:none}
+body.view-gantt #view-paper{display:none}
+body.view-gantt #view-gantt{display:block}
+body.view-gantt #nav-links-paper{display:none}
+body.view-gantt #nav-cta{display:none}
+
+/* === GANTT PAGE === */
+.gantt-hero{background:var(--navy);padding:6.5rem 0 3rem;position:relative;overflow:hidden}
+.gantt-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 85% 30%,rgba(0,143,226,.15),transparent 50%);pointer-events:none}
+.gantt-hero-inner{position:relative;z-index:1}
+.gantt-eyebrow{font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--blue);margin-bottom:1rem;display:flex;align-items:center;gap:10px}
+.gantt-eyebrow::before{content:'';width:24px;height:2px;background:var(--blue);border-radius:2px}
+.gantt-title{font-family:'Montserrat',sans-serif;font-size:clamp(1.8rem,4vw,2.6rem);font-weight:800;color:#fff;letter-spacing:-.02em;line-height:1.15;margin-bottom:1rem;max-width:780px}
+.gantt-subtitle{font-size:15px;line-height:1.65;color:rgba(255,255,255,.7);max-width:680px}
+.gantt-meta{display:flex;flex-wrap:wrap;gap:2.5rem;margin-top:1.75rem;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,.1)}
+.gantt-meta-item{display:flex;flex-direction:column}
+.gantt-meta-label{font-family:'Montserrat',sans-serif;font-size:9.5px;font-weight:700;letter-spacing:.15em;color:rgba(255,255,255,.5);text-transform:uppercase;margin-bottom:6px}
+.gantt-meta-value{font-family:'Montserrat',sans-serif;font-size:15px;font-weight:700;color:#fff}
+
+.gantt-body{background:var(--paper);padding:2.5rem 0 4rem}
+.gantt-body .container-wide,.gantt-numbers .container-wide,.gantt-hero .container{max-width:1320px}
+
+.gantt-legend{background:#fff;border:1px solid var(--rule);border-radius:var(--rlg);padding:1.25rem 1.5rem;margin-bottom:1.5rem;display:flex;flex-wrap:wrap;align-items:center;gap:1.25rem 2rem}
+.gantt-legend-title{font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-faint)}
+.gantt-legend-item{display:flex;align-items:center;gap:.6rem;font-size:12px;color:var(--ink-mid);font-weight:600}
+.gantt-swatch{width:34px;height:12px;border-radius:3px;flex-shrink:0}
+.gantt-swatch.dd{background:#5a5a80}
+.gantt-swatch.tx{background:linear-gradient(90deg,#5a5a80,#008fe2)}
+.gantt-swatch.id{background:linear-gradient(90deg,#008fe2,#070720)}
+.gantt-swatch.ms{background:#070720;width:14px;height:14px;border-radius:0;transform:rotate(45deg);border:2px solid var(--blue)}
+
+.gantt-frame{background:#fff;border:1px solid var(--rule);border-radius:var(--rlg);overflow:hidden;margin-bottom:.5rem;box-shadow:0 4px 20px rgba(7,7,32,.04)}
+.gantt-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.gantt-grid{display:grid;grid-template-columns:280px 1fr;min-width:1200px}
+
+.gantt-corner{background:var(--navy);padding:1rem 1.25rem;border-bottom:1px solid var(--rule);display:flex;flex-direction:column;justify-content:flex-end}
+.gantt-corner-label{font-family:'Montserrat',sans-serif;font-size:9.5px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:4px}
+.gantt-corner-title{font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;color:#fff}
+.gantt-phases{display:grid;grid-template-columns:1fr 1fr 1fr;background:var(--navy);border-bottom:1px solid rgba(255,255,255,.06)}
+.gantt-phase{display:flex;align-items:center;justify-content:center;font-family:'Montserrat',sans-serif;font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;border-left:1px solid rgba(255,255,255,.08);padding:.6rem 0;gap:8px}
+.gantt-phase:first-child{border-left:0}
+.gantt-phase.h1{background:rgba(152,152,184,.12);color:#c8c8dc}
+.gantt-phase.h2{background:rgba(0,143,226,.18);color:#9cd4f5}
+.gantt-phase.h3{background:rgba(0,143,226,.35);color:#fff}
+.gantt-phase-sub{font-family:'Open Sans',sans-serif;font-size:10px;font-weight:400;letter-spacing:0;text-transform:none;color:rgba(255,255,255,.65)}
+.gantt-months{display:grid;grid-template-columns:repeat(36,1fr);background:var(--navy);border-bottom:1px solid var(--rule)}
+.gantt-month{display:flex;align-items:center;justify-content:center;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;color:rgba(255,255,255,.45);border-left:1px solid rgba(255,255,255,.06);letter-spacing:.04em;padding:.45rem 0}
+.gantt-month:first-child{border-left:0}
+.gantt-month.qtr{color:#fff;background:rgba(0,143,226,.08)}
+
+.gantt-row-label{padding:1rem 1.25rem;border-bottom:1px solid var(--rule);background:var(--paper-tint);display:flex;flex-direction:column;justify-content:center;min-height:110px}
+.gantt-row-label.even{background:#fff}
+.gantt-row-ws{font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--blue);margin-bottom:4px}
+.gantt-row-title{font-family:'Montserrat',sans-serif;font-size:13.5px;font-weight:700;color:var(--navy);line-height:1.3;margin-bottom:5px}
+.gantt-row-facilitates{font-size:11px;color:var(--ink-muted);line-height:1.4;font-style:italic}
+
+.gantt-track{position:relative;border-bottom:1px solid var(--rule);min-height:110px;background:repeating-linear-gradient(to right,transparent 0,transparent calc(100%/36 - 1px),rgba(7,7,32,.04) calc(100%/36 - 1px),rgba(7,7,32,.04) calc(100%/36));display:grid;grid-template-columns:repeat(36,1fr);grid-template-rows:1fr;align-items:center}
+.gantt-track::before{content:'';position:absolute;left:33.333%;top:0;bottom:0;width:1px;background:rgba(0,143,226,.25);z-index:1}
+.gantt-track::after{content:'';position:absolute;left:66.666%;top:0;bottom:0;width:1px;background:rgba(0,143,226,.25);z-index:1}
+.gantt-track.even{background-color:#fafafd}
+
+.gantt-bar{position:relative;align-self:center;height:54px;border-radius:6px;padding:7px 72px 7px 12px;display:flex;flex-direction:column;justify-content:center;color:#fff;overflow:hidden;cursor:pointer;transition:transform .2s, box-shadow .2s;z-index:2;grid-row:1}
+.gantt-bar:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(7,7,32,.22);z-index:5}
+.gantt-bar-title{font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;color:#fff;line-height:1.2;letter-spacing:-.01em;position:relative;z-index:2;text-shadow:0 1px 2px rgba(0,0,0,.3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gantt-bar-detail{font-size:9.5px;color:rgba(255,255,255,.9);line-height:1.3;margin-top:3px;position:relative;z-index:2;text-shadow:0 1px 2px rgba(0,0,0,.3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.gantt-bar-num{position:absolute;right:6px;top:50%;transform:translateY(-50%);font-family:'Montserrat',sans-serif;font-size:11px;font-weight:800;color:#070720;background:#fff;padding:4px 7px;border-radius:4px;z-index:3;letter-spacing:-.02em;white-space:nowrap;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+
+.gantt-bar.foundation{background:linear-gradient(90deg,#5a5a80 0%,#5a5a80 60%,#7a7aa8 100%)}
+.gantt-bar.bridging{background:linear-gradient(90deg,#5a5a80 0%,#008fe2 100%)}
+.gantt-bar.intelligence{background:linear-gradient(90deg,#008fe2 0%,#070720 100%)}
+
+.gantt-milestone{position:absolute;top:75%;transform:translate(-50%,-50%);z-index:4;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:5px}
+.gantt-milestone .gm-diamond{width:16px;height:16px;background:#070720;border:2px solid var(--blue);transform:rotate(45deg);transition:background .2s}
+.gantt-milestone:hover .gm-diamond{background:var(--blue)}
+.gantt-milestone-label{font-family:'Montserrat',sans-serif;font-size:8.5px;font-weight:700;color:var(--navy);white-space:nowrap;letter-spacing:.04em;background:#fff;padding:2px 6px;border-radius:3px;border:1px solid var(--rule);pointer-events:none;text-transform:uppercase}
+
+.paradigm-strip{position:relative;height:42px;display:flex;align-items:center;font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;border-radius:var(--rlg);overflow:hidden;background:linear-gradient(90deg,#e8e8f0 0%,#c8c8dc 28%,#008fe2 70%,#070720 100%)}
+.paradigm-strip-l{position:absolute;left:1.25rem;color:#5a5a80}
+.paradigm-strip-m{position:absolute;left:50%;transform:translateX(-50%);color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.4)}
+.paradigm-strip-r{position:absolute;right:1.25rem;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.4)}
+
+.gantt-numbers{background:var(--navy);padding:3rem 0;margin-top:2.5rem;position:relative;overflow:hidden}
+.gantt-numbers::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 15% 50%,rgba(0,143,226,.12),transparent 45%);pointer-events:none}
+.gantt-numbers-head{margin-bottom:1.75rem;position:relative;z-index:1}
+.gantt-numbers-label{font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--blue);margin-bottom:.5rem}
+.gantt-numbers-title{font-family:'Montserrat',sans-serif;font-size:20px;font-weight:800;color:#fff;letter-spacing:-.01em}
+.gantt-num-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.25rem;position:relative;z-index:1}
+.gantt-num-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:var(--rlg);padding:1.25rem 1.25rem 1.1rem;position:relative;overflow:hidden}
+.gantt-num-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--blue)}
+.gantt-num-val{font-family:'Montserrat',sans-serif;font-size:24px;font-weight:800;color:#fff;letter-spacing:-.03em;line-height:1;margin-bottom:8px}
+.gantt-num-val .arr{color:var(--blue);margin:0 6px;font-weight:600;font-size:18px}
+.gantt-num-val .to{color:var(--blue)}
+.gantt-num-label{font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;letter-spacing:.04em;color:#fff;margin-bottom:5px;text-transform:uppercase}
+.gantt-num-desc{font-size:11.5px;color:rgba(255,255,255,.6);line-height:1.45}
+.gantt-num-when{font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-top:10px}
+@media (max-width:900px){.gantt-num-grid{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:520px){.gantt-num-grid{grid-template-columns:1fr}}
+
+@media (max-width:760px){
+  .gantt-grid{grid-template-columns:200px 1fr;min-width:1000px}
+  .gantt-row-label{padding:.75rem 1rem;min-height:96px}
+  .gantt-row-title{font-size:12px}
+  .gantt-row-facilitates{font-size:10.5px}
 }
 </style>
 </head>
@@ -382,7 +495,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.7);padding:3rem 0 1.5rem}
     <span class="nav-sep"></span>
     <span class="nav-doc">Data Intelligence Platform</span>
   </a>
-  <ul class="nav-links">
+  <ul class="nav-links" id="nav-links-paper">
     <li><a href="#intro">01 Intro</a></li>
     <li><a href="#maturity">02 Maturity</a></li>
     <li><a href="#friction">03 Friction</a></li>
@@ -392,7 +505,11 @@ footer{background:var(--navy);color:rgba(255,255,255,.7);padding:3rem 0 1.5rem}
     <li><a href="#kpis">07 KPIs</a></li>
     <li><a href="#roadmap">08 Roadmap</a></li>
   </ul>
-  <a href="#roadmap" class="nav-cta">View Roadmap</a>
+  <div class="view-switch">
+    <button class="vs-btn active" id="vs-paper" onclick="setView('paper')">Whitepaper</button>
+    <button class="vs-btn" id="vs-gantt" onclick="setView('gantt')">Gantt Plan</button>
+  </div>
+  <a href="#roadmap" class="nav-cta" id="nav-cta">View Roadmap</a>
   <button class="hamburger" id="ham" aria-label="Menu"><span></span><span></span><span></span></button>
 </nav>
 
@@ -408,6 +525,8 @@ footer{background:var(--navy);color:rgba(255,255,255,.7);padding:3rem 0 1.5rem}
 </div>
 
 <main>
+
+<div id="view-paper">
 
 <!-- HERO -->
 <section id="hero">
@@ -425,7 +544,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.7);padding:3rem 0 1.5rem}
     </div>
     <div class="hero-meta fi">
       <div class="meta-item"><span class="meta-label">Authored by</span><span class="meta-val">Nic Adams & Kelli Dudley</span></div>
-      <div class="meta-item"><span class="meta-label">Audience</span><span class="meta-val">CTPO · Data Engineering · Platform Leaders</span></div>
+      <div class="meta-item"><span class="meta-label">Audience</span><span class="meta-val">CPTO · Data Engineering · Platform Leaders</span></div>
       <div class="meta-item"><span class="meta-label">Version</span><span class="meta-val">1.0 — Internal Reference</span></div>
       <div class="meta-item"><span class="meta-label">Classification</span><span class="meta-val">Internal — Confidential</span></div>
     </div>
@@ -488,42 +607,42 @@ footer{background:var(--navy);color:rgba(255,255,255,.7);padding:3rem 0 1.5rem}
             <path d="M0,0 L0,10 L10,5 z" fill="#008fe2"/>
           </marker>
         </defs>
- 
+
         <!-- LEFT zone background -->
         <rect x="0" y="40" width="320" height="480" fill="url(#leftBg)"/>
         <!-- TRANSFORMATION zone (centre) -->
         <rect x="320" y="40" width="120" height="480" fill="url(#bridge)" opacity="0.7"/>
         <!-- RIGHT zone background -->
         <rect x="440" y="40" width="320" height="480" fill="url(#rightBg)"/>
- 
+
         <!-- Title strip -->
         <text x="380" y="26" text-anchor="middle" font-size="10" font-family="'Montserrat',sans-serif" fill="#9898b8" letter-spacing="2" font-weight="700">THE SHIFT — HOW THE ORGANISATION THINKS AND OPERATES</text>
- 
+
         <!-- LEFT label block -->
         <g>
           <text x="32" y="76" font-size="9.5" font-family="'Montserrat',sans-serif" fill="#9898b8" letter-spacing="1.5" font-weight="700">FROM</text>
           <text x="32" y="100" font-size="22" font-family="'Montserrat',sans-serif" fill="#070720" font-weight="800" letter-spacing="-0.5">Data-Driven</text>
           <text x="32" y="120" font-size="11" fill="#5a5a80" font-style="italic">Data is a thing we report on</text>
         </g>
- 
+
         <!-- RIGHT label block -->
         <g>
           <text x="448" y="76" font-size="9.5" font-family="'Montserrat',sans-serif" fill="#008fe2" letter-spacing="1.5" font-weight="700">TO</text>
           <text x="448" y="100" font-size="22" font-family="'Montserrat',sans-serif" fill="#ffffff" font-weight="800" letter-spacing="-0.5">Intelligence-Driven</text>
           <text x="448" y="120" font-size="11" fill="#a8c5e0" font-style="italic">Data is a system that decides and acts</text>
         </g>
- 
+
         <!-- Transformation zone vertical label -->
         <g transform="translate(380,300) rotate(-90)">
           <text x="0" y="-22" text-anchor="middle" font-size="10" font-family="'Montserrat',sans-serif" fill="#ffffff" letter-spacing="3.5" font-weight="700">TRANSFORMATION</text>
         </g>
- 
+
         <!-- Centre arrow -->
         <g>
           <line x1="290" y1="156" x2="465" y2="156" stroke="url(#flowGrad)" stroke-width="3" marker-end="url(#ar-flow)"/>
         </g>
- 
-        <!-- ROW 1: MINDSET -->
+
+        <!-- ROW 1: PROCESSING -->
         <g>
           <text x="32" y="180" font-size="9" font-family="'Montserrat',sans-serif" fill="#5a5a80" letter-spacing="1.5" font-weight="700">PROCESSING</text>
           <!-- Left state -->
@@ -540,7 +659,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.7);padding:3rem 0 1.5rem}
           </g>
         </g>
 
-        <!-- ROW 2: OPERATING MODEL -->
+        <!-- ROW 2: FORMAT -->
         <g>
           <text x="32" y="266" font-size="9" font-family="'Montserrat',sans-serif" fill="#5a5a80" letter-spacing="1.5" font-weight="700">FORMAT</text>
           <g transform="translate(32,280)">
@@ -554,7 +673,7 @@ footer{background:var(--navy);color:rgba(255,255,255,.7);padding:3rem 0 1.5rem}
           </g>
         </g>
 
-        <!-- ROW 3: VALUE OF DATA -->
+        <!-- ROW 3: OUTCOME -->
         <g>
           <text x="32" y="352" font-size="9" font-family="'Montserrat',sans-serif" fill="#5a5a80" letter-spacing="1.5" font-weight="700">OUTCOME</text>
           <g transform="translate(32,366)">
@@ -564,11 +683,11 @@ footer{background:var(--navy);color:rgba(255,255,255,.7);padding:3rem 0 1.5rem}
           <line x1="296" y1="389" x2="455" y2="389" stroke="#008fe2" stroke-width="1.5" stroke-dasharray="4,4" marker-end="url(#ar-flow)" opacity="0.7"/>
           <g transform="translate(472,366)">
             <rect x="0" y="0" width="256" height="46" rx="4" fill="#070720" stroke="#008fe2" stroke-width="1.2"/>
-            <text x="14" y="22" font-size="13" fill="#ffffff" font-weight="700">Reusable data products & AI agents</text>
+            <text x="14" y="22" font-size="13" fill="#ffffff" font-weight="700">Reusable data products &amp; AI agents</text>
           </g>
         </g>
 
-                <!-- ROW 4: VALUE OF DATA -->
+        <!-- ROW 4: DATA SCALE -->
         <g>
           <text x="32" y="438" font-size="9" font-family="'Montserrat',sans-serif" fill="#5a5a80" letter-spacing="1.5" font-weight="700">DATA SCALE</text>
           <g transform="translate(32,452)">
@@ -586,23 +705,23 @@ footer{background:var(--navy);color:rgba(255,255,255,.7);padding:3rem 0 1.5rem}
         <g>
           <text x="32" y="540" font-size="9.5" font-family="'Montserrat',sans-serif" fill="#9898b8" letter-spacing="1" font-weight="700">CADENCE</text>
           <text x="160" y="540" text-anchor="middle" font-size="11" fill="#5a5a80" font-weight="700">Weekly · Monthly</text>
- 
+
           <text x="728" y="540" text-anchor="end" font-size="9.5" font-family="'Montserrat',sans-serif" fill="#008fe2" letter-spacing="1" font-weight="700">CADENCE</text>
           <text x="600" y="540" text-anchor="middle" font-size="11" fill="#008fe2" font-weight="700">&lt; 200ms · always-on</text>
         </g>
       </svg>
     </div>
- 
+
     <div class="pull-quote fi">
       <p class="pull-quote-text">Being "data-driven" is no longer a competitive advantage. It is an operational liability.</p>
       <p class="pull-quote-attr">— Executive Summary · Section 1</p>
     </div>
- 
+
     <div class="prose fi">
       <p>This whitepaper outlines a strategic blueprint for the implementation of a next-generation <strong style="color:var(--navy)">Data Intelligence Platform</strong>. By converging the data warehousing paradigm with the flexibility of an open data lakehouse architecture, this framework provides a comprehensive roadmap to eliminate systemic operational friction, establish federated data stewardship, and institutionalise a semantic layer optimised for both human analysts and artificial intelligence agents.</p>
       <p>The ultimate objective is to accelerate organisational velocity, transition from reactive reporting to autonomous optimisation, and maximise the compounding economic yield of Nine's data assets.</p>
     </div>
- 
+
     <div class="callout callout-info fi">
       <span class="callout-icon">ℹ</span>
       <div class="callout-body">
@@ -1301,6 +1420,251 @@ footer{background:var(--navy);color:rgba(255,255,255,.7);padding:3rem 0 1.5rem}
   </div>
 </footer>
 
+</div><!-- /#view-paper -->
+
+<!-- ========== GANTT VIEW ========== -->
+<div id="view-gantt">
+
+  <section class="gantt-hero">
+    <div class="container gantt-hero-inner">
+      <div class="gantt-eyebrow">Transformation programme</div>
+      <h1 class="gantt-title">36-month plan: from data-driven to intelligence-driven</h1>
+      <p class="gantt-subtitle">Six workstreams sequenced across three horizons. Foundation work in greys gives way to autonomous capability in blue — read the colour as the paradigm shifting in real time, on every bar.</p>
+      <div class="gantt-meta">
+        <div class="gantt-meta-item"><span class="gantt-meta-label">Horizon</span><span class="gantt-meta-value">36 months · 3 phases</span></div>
+        <div class="gantt-meta-item"><span class="gantt-meta-label">Workstreams</span><span class="gantt-meta-value">6 parallel tracks</span></div>
+        <div class="gantt-meta-item"><span class="gantt-meta-label">Milestones</span><span class="gantt-meta-value">8 hard gates</span></div>
+        <div class="gantt-meta-item"><span class="gantt-meta-label">Outcome</span><span class="gantt-meta-value">Stage 4 maturity by M36</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="gantt-body">
+    <div class="container-wide">
+
+      <div class="gantt-legend">
+        <span class="gantt-legend-title">Paradigm overlay</span>
+        <div class="gantt-legend-item"><span class="gantt-swatch dd"></span>Foundation work (data-driven mode)</div>
+        <div class="gantt-legend-item"><span class="gantt-swatch tx"></span>Bridging — transition in progress</div>
+        <div class="gantt-legend-item"><span class="gantt-swatch id"></span>Intelligence-driven operating model</div>
+        <div class="gantt-legend-item"><span class="gantt-swatch ms"></span>Hard milestone</div>
+      </div>
+
+      <div class="gantt-frame">
+        <div class="gantt-scroll">
+          <div class="gantt-grid">
+
+            <!-- Header row: corner + (phases stacked over months) -->
+            <div class="gantt-corner">
+              <div class="gantt-corner-label">Workstream</div>
+              <div class="gantt-corner-title">Six tracks</div>
+            </div>
+            <div class="gantt-head-col">
+              <div class="gantt-phases">
+                <div class="gantt-phase h1">H1 · Foundation <span class="gantt-phase-sub">M1–12</span></div>
+                <div class="gantt-phase h2">H2 · Consolidation <span class="gantt-phase-sub">M12–24</span></div>
+                <div class="gantt-phase h3">H3 · Autonomy <span class="gantt-phase-sub">M24–36</span></div>
+              </div>
+              <div class="gantt-months">
+                <div class="gantt-month qtr">M1</div><div class="gantt-month">M2</div><div class="gantt-month">M3</div>
+                <div class="gantt-month qtr">M4</div><div class="gantt-month">M5</div><div class="gantt-month">M6</div>
+                <div class="gantt-month qtr">M7</div><div class="gantt-month">M8</div><div class="gantt-month">M9</div>
+                <div class="gantt-month qtr">M10</div><div class="gantt-month">M11</div><div class="gantt-month">M12</div>
+                <div class="gantt-month qtr">M13</div><div class="gantt-month">M14</div><div class="gantt-month">M15</div>
+                <div class="gantt-month qtr">M16</div><div class="gantt-month">M17</div><div class="gantt-month">M18</div>
+                <div class="gantt-month qtr">M19</div><div class="gantt-month">M20</div><div class="gantt-month">M21</div>
+                <div class="gantt-month qtr">M22</div><div class="gantt-month">M23</div><div class="gantt-month">M24</div>
+                <div class="gantt-month qtr">M25</div><div class="gantt-month">M26</div><div class="gantt-month">M27</div>
+                <div class="gantt-month qtr">M28</div><div class="gantt-month">M29</div><div class="gantt-month">M30</div>
+                <div class="gantt-month qtr">M31</div><div class="gantt-month">M32</div><div class="gantt-month">M33</div>
+                <div class="gantt-month qtr">M34</div><div class="gantt-month">M35</div><div class="gantt-month">M36</div>
+              </div>
+            </div>
+
+            <!-- ROW 1: Iceberg + Contracts -->
+            <div class="gantt-row-label">
+              <div class="gantt-row-ws">WS1 · Lakehouse</div>
+              <div class="gantt-row-title">Apache Iceberg &amp; Data Contracts</div>
+              <div class="gantt-row-facilitates">Facilitates: open formats, schema stability, vendor neutrality</div>
+            </div>
+            <div class="gantt-track">
+              <div class="gantt-bar foundation" style="grid-column:1 / span 6" title="M1–6 · Foundation work">
+                <div class="gantt-bar-title">Iceberg standardisation</div>
+                <div class="gantt-bar-detail">Adopt open table format · top 10 sources</div>
+                <div class="gantt-bar-num">10 sources</div>
+              </div>
+              <div class="gantt-bar bridging" style="grid-column:7 / span 8" title="M7–14 · Customer domain migration">
+                <div class="gantt-bar-title">Customer domain migration</div>
+                <div class="gantt-bar-detail">Contract protocols → producer-owned quality</div>
+                <div class="gantt-bar-num">≥99.5%</div>
+              </div>
+              <div class="gantt-milestone" style="left:16.66%" title="M6 · Iceberg gate"><span class="gm-diamond"></span><span class="gantt-milestone-label">M6 · Iceberg gate</span></div>
+            </div>
+
+            <!-- ROW 2: Platform & Stewardship -->
+            <div class="gantt-row-label even">
+              <div class="gantt-row-ws">WS2 · Platform</div>
+              <div class="gantt-row-title">Platform Foundation &amp; Federated Stewardship</div>
+              <div class="gantt-row-facilitates">Facilitates: shift-left quality ownership, lineage everywhere</div>
+            </div>
+            <div class="gantt-track even">
+              <div class="gantt-bar foundation" style="grid-column:3 / span 7" title="M3–9 · Platform domain stand-up">
+                <div class="gantt-bar-title">Stand up Platform domain</div>
+                <div class="gantt-bar-detail">Embed engineers in source teams</div>
+                <div class="gantt-bar-num">100% lineage</div>
+              </div>
+              <div class="gantt-bar bridging" style="grid-column:10 / span 6" title="M10–15 · Online Feature Store">
+                <div class="gantt-bar-title">Online Feature Store</div>
+                <div class="gantt-bar-detail">Low-latency tier · offline/online parity</div>
+                <div class="gantt-bar-num">&lt;200ms</div>
+              </div>
+              <div class="gantt-milestone" style="left:25%" title="M9 · Stewardship operational"><span class="gm-diamond"></span><span class="gantt-milestone-label">M9 · Stewardship live</span></div>
+            </div>
+
+            <!-- ROW 3: Pipeline consolidation -->
+            <div class="gantt-row-label">
+              <div class="gantt-row-ws">WS3 · Modelling</div>
+              <div class="gantt-row-title">Deprecate Bespoke Pipelines · Modular Base Models</div>
+              <div class="gantt-row-facilitates">Facilitates: single source of truth, TCO reduction, fewer breakages</div>
+            </div>
+            <div class="gantt-track">
+              <div class="gantt-bar bridging" style="grid-column:9 / span 10" title="M9–18 · Consolidation">
+                <div class="gantt-bar-title">Consolidate 200+ duplicated pipelines</div>
+                <div class="gantt-bar-detail">Publish Consumer · Product · Transaction base models</div>
+                <div class="gantt-bar-num">−200 pipes</div>
+              </div>
+              <div class="gantt-milestone" style="left:50%" title="M18 · 80% base-model coverage"><span class="gm-diamond"></span><span class="gantt-milestone-label">M18 · 80% coverage</span></div>
+            </div>
+
+            <!-- ROW 4: Global Identity -->
+            <div class="gantt-row-label even">
+              <div class="gantt-row-ws">WS4 · Identity</div>
+              <div class="gantt-row-title">Global Unified Identity Framework</div>
+              <div class="gantt-row-facilitates">Facilitates: cross-platform attribution, personalisation, ad yield</div>
+            </div>
+            <div class="gantt-track even">
+              <div class="gantt-bar bridging" style="grid-column:12 / span 9" title="M12–20 · Identity resolution">
+                <div class="gantt-bar-title">Deterministic + probabilistic resolution</div>
+                <div class="gantt-bar-detail">Single anonymised Global ID across brands</div>
+                <div class="gantt-bar-num">1 ID</div>
+              </div>
+              <div class="gantt-milestone" style="left:55.55%" title="M20 · Global ID launch"><span class="gm-diamond"></span><span class="gantt-milestone-label">M20 · Global ID</span></div>
+            </div>
+
+            <!-- ROW 5: Semantic Layer -->
+            <div class="gantt-row-label">
+              <div class="gantt-row-ws">WS5 · Semantic</div>
+              <div class="gantt-row-title">Machine-Readable Semantic Framework</div>
+              <div class="gantt-row-facilitates">Facilitates: trustworthy AI queries, end of metric drift</div>
+            </div>
+            <div class="gantt-track">
+              <div class="gantt-bar intelligence" style="grid-column:18 / span 12" title="M18–30 · Autonomy phase">
+                <div class="gantt-bar-title">Semantic gateway · API-first</div>
+                <div class="gantt-bar-detail">Versioned metrics · BI &amp; agents through one gateway</div>
+                <div class="gantt-bar-num">100%</div>
+              </div>
+              <div class="gantt-milestone" style="left:83.33%" title="M30 · Gateway enforced"><span class="gm-diamond"></span><span class="gantt-milestone-label">M30 · Gateway live</span></div>
+            </div>
+
+            <!-- ROW 6: AI Agents -->
+            <div class="gantt-row-label even">
+              <div class="gantt-row-ws">WS6 · Autonomy</div>
+              <div class="gantt-row-title">Production AI Agents &amp; Autonomous Workflows</div>
+              <div class="gantt-row-facilitates">Facilitates: real-time monetisation, dynamic editorial, engagement uplift</div>
+            </div>
+            <div class="gantt-track even">
+              <div class="gantt-bar intelligence" style="grid-column:24 / span 13" title="M24–36 · Production agents">
+                <div class="gantt-bar-title">Production AI agents in priority domains</div>
+                <div class="gantt-bar-detail">Programmatic monetisation · content rec · scheduling</div>
+                <div class="gantt-bar-num">Stage 4</div>
+              </div>
+              <div class="gantt-milestone" style="left:90%" title="M33 · First production agent"><span class="gm-diamond"></span><span class="gantt-milestone-label">M33 · Agent live</span></div>
+              <div class="gantt-milestone" style="left:96%" title="M36 · Stage 4 reached"><span class="gm-diamond"></span><span class="gantt-milestone-label">M36 · Stage 4</span></div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="paradigm-strip">
+        <span class="paradigm-strip-l">DATA-DRIVEN</span>
+        <span class="paradigm-strip-m">— TRANSFORMATION —</span>
+        <span class="paradigm-strip-r">INTELLIGENCE-DRIVEN</span>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="gantt-numbers">
+    <div class="container-wide">
+      <div class="gantt-numbers-head">
+        <div class="gantt-numbers-label">Key numbers — before / after</div>
+        <h2 class="gantt-numbers-title">The economic and operational shape of the shift</h2>
+      </div>
+      <div class="gantt-num-grid">
+
+        <div class="gantt-num-card">
+          <div class="gantt-num-val">60–70%<span class="arr">→</span><span class="to">≤30%</span></div>
+          <div class="gantt-num-label">Engineer capacity on remediation</div>
+          <div class="gantt-num-desc">Capacity reclaimed from cleaning, deduping, parsing — redirected to model and product work.</div>
+          <div class="gantt-num-when">By M18 · WS1–3</div>
+        </div>
+
+        <div class="gantt-num-card">
+          <div class="gantt-num-val">Hours / Days<span class="arr">→</span><span class="to">&lt;200ms</span></div>
+          <div class="gantt-num-label">Decision latency (p99)</div>
+          <div class="gantt-num-desc">From human-paced dashboard cycles to agent-paced streaming decisions on the Online Feature Store.</div>
+          <div class="gantt-num-when">By M15 · WS2</div>
+        </div>
+
+        <div class="gantt-num-card">
+          <div class="gantt-num-val">~85%<span class="arr">→</span><span class="to">≥99.5%</span></div>
+          <div class="gantt-num-label">Schema contract adherence</div>
+          <div class="gantt-num-desc">Producer-owned contracts replace consumer-side remediation. Drift detected at source, not in dashboards.</div>
+          <div class="gantt-num-when">By M14 · WS1</div>
+        </div>
+
+        <div class="gantt-num-card">
+          <div class="gantt-num-val">200+<span class="arr">→</span><span class="to">12</span></div>
+          <div class="gantt-num-label">Bespoke pipelines</div>
+          <div class="gantt-num-desc">Duplicated pipelines collapsed into a handful of canonical base models. Every downstream product inherits.</div>
+          <div class="gantt-num-when">By M18 · WS3</div>
+        </div>
+
+        <div class="gantt-num-card">
+          <div class="gantt-num-val">Fragmented<span class="arr">→</span><span class="to">1 ID</span></div>
+          <div class="gantt-num-label">Global identity</div>
+          <div class="gantt-num-desc">A single anonymised Global ID across all Nine brands — the substrate for personalisation and attribution.</div>
+          <div class="gantt-num-when">By M20 · WS4</div>
+        </div>
+
+        <div class="gantt-num-card">
+          <div class="gantt-num-val">N<span class="arr">→</span><span class="to">1 gateway</span></div>
+          <div class="gantt-num-label">Metric definitions</div>
+          <div class="gantt-num-desc">Every "active user", every "revenue" number defined once, versioned, served via the semantic layer.</div>
+          <div class="gantt-num-when">By M30 · WS5</div>
+        </div>
+
+        <div class="gantt-num-card">
+          <div class="gantt-num-val">0<span class="arr">→</span><span class="to">Stage 4</span></div>
+          <div class="gantt-num-label">Production AI agents</div>
+          <div class="gantt-num-desc">From zero to autonomous agents executing monetisation, recommendation, and scheduling in priority domains.</div>
+          <div class="gantt-num-when">By M36 · WS6</div>
+        </div>
+
+        <div class="gantt-num-card">
+          <div class="gantt-num-val">Cost centre<span class="arr">→</span><span class="to">Compounding asset</span></div>
+          <div class="gantt-num-label">Value of data</div>
+          <div class="gantt-num-desc">Yield grows with every loop. Each agent improves the next via continuous learning on the lakehouse.</div>
+          <div class="gantt-num-when">M24 onwards</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</div><!-- /#view-gantt -->
+
 </main>
 
 <button class="fab" onclick="window.print()" aria-label="Export as PDF">↓ Export PDF</button>
@@ -1329,6 +1693,25 @@ footer{background:var(--navy);color:rgba(255,255,255,.7);padding:3rem 0 1.5rem}
 
 
 <script>
+/* ============================================================
+   VIEW SWITCHER (Whitepaper ⇄ Gantt)
+============================================================ */
+function setView(view){
+  const body = document.body;
+  const paperBtn = document.getElementById('vs-paper');
+  const ganttBtn = document.getElementById('vs-gantt');
+  if(view==='gantt'){
+    body.classList.add('view-gantt');
+    paperBtn.classList.remove('active');
+    ganttBtn.classList.add('active');
+  } else {
+    body.classList.remove('view-gantt');
+    paperBtn.classList.add('active');
+    ganttBtn.classList.remove('active');
+  }
+  window.scrollTo({top:0, behavior:'instant'});
+}
+
 /* ============================================================
    PROGRESS BAR
 ============================================================ */
