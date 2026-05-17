@@ -1,0 +1,1444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Intelligence Platforms — Nine Enterprise Architecture</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Open+Sans:ital,wght@0,300;0,400;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#008fe2;--blue-dk:#006db0;--blue-dkr:#005a94;
+  --blue-lt:#e0f2fd;--blue-pale:#f0f8fe;
+  --navy:#070720;--navy-mid:#0e0e35;--navy-soft:#1a1a50;
+  --ink:#070720;--ink-mid:#2e2e50;--ink-muted:#5a5a80;--ink-faint:#9898b8;
+  --paper:#ffffff;--paper-mid:#f4f7fb;--paper-tint:#eef4fc;
+  --rule:#dde8f5;
+  --green:#007a55;--green-lt:#e0f4ee;
+  --amber:#b06800;--amber-lt:#fef3e0;
+  --red:#c0392b;--red-lt:#fdecea;
+  --purple:#6d4aff;--purple-lt:#ece6ff;
+  --r:4px;--rlg:8px;--rxl:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Open Sans',sans-serif;background:var(--paper);color:var(--ink);font-size:16px;line-height:1.75;-webkit-font-smoothing:antialiased}
+
+/* PROGRESS */
+#prog{position:fixed;top:0;left:0;height:3px;background:var(--blue);width:0;z-index:200;transition:width .1s linear}
+
+/* NAV */
+nav{position:fixed;top:3px;left:0;right:0;z-index:100;background:var(--navy);display:flex;align-items:center;justify-content:space-between;padding:0 2rem;height:58px;gap:1rem}
+.nav-left{display:flex;align-items:center;gap:12px;text-decoration:none;flex-shrink:0}
+.nine-dots{display:grid;grid-template-columns:repeat(3,6px);gap:2.5px}
+.nine-dots span{width:6px;height:6px;border-radius:50%;background:var(--blue);display:block}
+.nav-word{font-family:'Montserrat',sans-serif;font-weight:800;font-size:20px;color:#fff;letter-spacing:-.02em;line-height:1}
+.nav-sep{width:1px;height:22px;background:rgba(255,255,255,.18);flex-shrink:0}
+.nav-doc{font-family:'Montserrat',sans-serif;font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.4);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.nav-links{display:flex;gap:1.4rem;list-style:none}
+.nav-links a{font-family:'Montserrat',sans-serif;font-size:11px;font-weight:600;color:rgba(255,255,255,.55);text-decoration:none;letter-spacing:.05em;white-space:nowrap;transition:color .2s}
+.nav-links a:hover,.nav-links a.active{color:var(--blue)}
+.nav-cta{font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--navy);background:var(--blue);padding:7px 16px;border-radius:var(--r);text-decoration:none;white-space:nowrap;transition:background .2s;flex-shrink:0}
+.nav-cta:hover{background:#00a8ff}
+.hamburger{display:none;background:none;border:none;cursor:pointer;padding:4px;flex-direction:column;gap:4px}
+.hamburger span{display:block;width:22px;height:2px;background:rgba(255,255,255,.7);border-radius:2px;transition:.3s}
+.hamburger.open span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+.hamburger.open span:nth-child(2){opacity:0}
+.hamburger.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+.mobile-menu{display:none;position:fixed;top:61px;left:0;right:0;background:var(--navy-mid);z-index:99;padding:1rem 1.5rem 1.5rem;border-top:1px solid rgba(255,255,255,.1)}
+.mobile-menu.open{display:block}
+.mobile-menu a{display:block;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:600;color:rgba(255,255,255,.75);text-decoration:none;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.08);letter-spacing:.04em}
+
+/* LAYOUT */
+main{padding-top:61px}
+.section{padding:4rem 0}
+.section-alt{background:var(--paper-mid)}
+.container{max-width:900px;margin:0 auto;padding:0 2rem}
+.container-wide{max-width:1160px;margin:0 auto;padding:0 2rem}
+
+/* FADE-IN */
+.fi{opacity:0;transform:translateY(20px);transition:opacity .7s ease,transform .7s ease}
+.fi.vis{opacity:1;transform:none}
+
+/* HERO */
+#hero{background:var(--navy);padding:5rem 0 4.5rem;position:relative;overflow:hidden}
+#hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 90% at 85% 50%,rgba(0,143,226,.13) 0%,transparent 65%),repeating-linear-gradient(0deg,transparent,transparent 39px,rgba(255,255,255,.02) 40px),repeating-linear-gradient(90deg,transparent,transparent 39px,rgba(255,255,255,.02) 40px);pointer-events:none}
+.hero-dots-bg{position:absolute;right:-5%;top:50%;transform:translateY(-50%);width:min(500px,55vw);height:min(500px,55vw);background-image:radial-gradient(circle,rgba(0,143,226,.15) 10px,transparent 10px);background-size:50px 50px;border-radius:50%;pointer-events:none;animation:slowSpin 80s linear infinite}
+@keyframes slowSpin{to{transform:translateY(-50%) rotate(360deg)}}
+.hero-eyebrow{font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--blue);margin-bottom:1.25rem;display:flex;align-items:center;gap:10px;position:relative}
+.hero-eyebrow::before{content:'';width:24px;height:2px;background:var(--blue);border-radius:2px;flex-shrink:0}
+h1.hero-title{font-family:'Montserrat',sans-serif;font-size:clamp(1.9rem,4.5vw,3.2rem);font-weight:800;line-height:1.1;letter-spacing:-.02em;color:#fff;margin-bottom:1.25rem;max-width:760px;position:relative}
+h1.hero-title em{font-style:normal;color:var(--blue);position:relative}
+h1.hero-title em::after{content:'';position:absolute;left:0;right:0;bottom:-4px;height:3px;background:var(--blue);opacity:.4;border-radius:2px}
+.hero-sub{font-size:clamp(14px,2vw,17px);font-weight:300;color:rgba(255,255,255,.6);max-width:560px;line-height:1.7;margin-bottom:2.5rem;position:relative}
+.hero-tags{display:flex;flex-wrap:wrap;gap:.6rem;margin-bottom:2.5rem;position:relative}
+.hero-tag{font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.2);padding:5px 12px;border-radius:20px;transition:border-color .2s,color .2s}
+.hero-tag:hover{border-color:var(--blue);color:var(--blue)}
+.hero-meta{display:flex;gap:2rem;flex-wrap:wrap;padding-top:2rem;border-top:1px solid rgba(255,255,255,.1);position:relative}
+.meta-item{display:flex;flex-direction:column;gap:4px}
+.meta-label{font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.3)}
+.meta-val{font-size:13px;color:rgba(255,255,255,.8)}
+
+/* TOC */
+#toc{background:var(--blue);padding:2rem 0}
+.toc-label{font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:1rem}
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:0}
+.toc-item{display:flex;align-items:baseline;gap:10px;padding:8px 12px 8px 0;border-bottom:1px solid rgba(255,255,255,.15);text-decoration:none;color:#fff;transition:color .2s,padding-left .2s}
+.toc-item:hover{color:var(--navy);padding-left:6px}
+.toc-num{font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;color:rgba(255,255,255,.5);min-width:22px}
+.toc-title{font-size:13px;font-weight:600}
+
+/* SECTION HEADERS */
+.sec-hdr{display:flex;align-items:center;gap:14px;margin-bottom:2.5rem}
+.sec-num{font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;letter-spacing:.1em;color:#fff;background:var(--blue);padding:4px 11px;border-radius:var(--r);white-space:nowrap}
+h2.sec-title{font-family:'Montserrat',sans-serif;font-size:clamp(1.35rem,3vw,1.8rem);font-weight:800;letter-spacing:-.02em;line-height:1.2;color:var(--navy)}
+.sec-rule{height:2px;background:var(--blue);flex:1;opacity:.18;min-width:0}
+
+/* LEAD */
+.lead{font-size:clamp(15px,2vw,17.5px);line-height:1.7;color:var(--ink-muted);border-left:3px solid var(--blue);padding-left:1.25rem;margin-bottom:2rem}
+
+/* PROSE */
+.prose p{margin-bottom:1.1rem;color:var(--ink-muted);font-size:15px;line-height:1.8}
+.prose p:last-child{margin-bottom:0}
+h3.sub-h{font-family:'Montserrat',sans-serif;font-size:1rem;font-weight:700;color:var(--navy);margin:2.25rem 0 .65rem;letter-spacing:-.01em}
+
+/* CALLOUT */
+.callout{border-radius:var(--rlg);padding:1.1rem 1.4rem;margin:1.75rem 0;display:flex;gap:.9rem;align-items:flex-start}
+.callout-info{background:var(--blue-pale);border-left:3px solid var(--blue)}
+.callout-warn{background:var(--amber-lt);border-left:3px solid var(--amber)}
+.callout-ok{background:var(--green-lt);border-left:3px solid var(--green)}
+.callout-risk{background:var(--red-lt);border-left:3px solid var(--red)}
+.callout-icon{font-size:16px;flex-shrink:0;margin-top:2px}
+.callout-body{font-size:13.5px;line-height:1.65;color:var(--ink-muted)}
+.callout-body strong{color:var(--ink);font-weight:700;display:block;margin-bottom:3px}
+
+/* METRICS */
+.metrics-strip{background:var(--navy);padding:3.5rem 0;position:relative;overflow:hidden}
+.metrics-strip::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 50% 80% at 50% 50%,rgba(0,143,226,.08) 0%,transparent 70%);pointer-events:none}
+.metrics-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:0;position:relative}
+.metric-item{padding:0 2rem;border-right:1px solid rgba(255,255,255,.1)}
+.metric-item:last-child{border-right:none}
+.metric-num{font-family:'Montserrat',sans-serif;font-size:clamp(2rem,4vw,3rem);font-weight:800;color:var(--blue);line-height:1;margin-bottom:6px;letter-spacing:-.03em}
+.metric-label{font-size:13px;color:rgba(255,255,255,.5);line-height:1.4}
+.metric-unit{font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.1em;color:rgba(255,255,255,.25);display:block;margin-top:3px;text-transform:uppercase}
+
+/* DIAGRAM */
+.arch-diagram{background:#fff;border:1px solid var(--rule);border-radius:var(--rlg);padding:1.75rem;margin:2rem 0;overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative}
+.arch-diagram svg{display:block;max-width:100%;margin:0 auto}
+.diagram-zoom-hint{position:absolute;top:10px;right:12px;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-faint);background:var(--paper-tint);padding:5px 10px;border-radius:20px;display:flex;align-items:center;gap:5px;pointer-events:none;opacity:0;transition:opacity .25s}
+.arch-diagram.zoomable{cursor:zoom-in;transition:box-shadow .25s, border-color .25s}
+.arch-diagram.zoomable:hover{box-shadow:0 8px 30px rgba(0,143,226,.15);border-color:var(--blue)}
+.arch-diagram.zoomable:hover .diagram-zoom-hint{opacity:1}
+
+/* DIAGRAM MODAL */
+#diagModal{position:fixed;inset:0;background:rgba(7,7,32,.92);z-index:300;display:none;align-items:center;justify-content:center;padding:2rem;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+#diagModal.open{display:flex;animation:modalFade .25s ease}
+@keyframes modalFade{from{opacity:0}to{opacity:1}}
+.diag-modal-inner{background:#fff;border-radius:var(--rxl);max-width:min(1200px,95vw);max-height:90vh;width:100%;height:85vh;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.5);position:relative}
+.diag-modal-head{display:flex;align-items:center;justify-content:space-between;padding:1rem 1.5rem;border-bottom:1px solid var(--rule);background:var(--paper-mid);flex-shrink:0}
+.diag-modal-title{font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;color:var(--navy);letter-spacing:-.01em}
+.diag-modal-ctrls{display:flex;gap:.5rem;align-items:center}
+.diag-ctrl{font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;color:var(--navy);background:#fff;border:1px solid var(--rule);border-radius:var(--r);width:32px;height:32px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s,color .2s,border-color .2s}
+.diag-ctrl:hover{background:var(--blue);color:#fff;border-color:var(--blue)}
+.diag-ctrl-close{margin-left:.5rem;background:var(--navy);color:#fff;border-color:var(--navy)}
+.diag-ctrl-close:hover{background:var(--red);border-color:var(--red)}
+.diag-modal-body{flex:1;min-height:0;overflow:hidden;position:relative;background:#f9fbfd;background-image:radial-gradient(circle,rgba(0,143,226,.04) 1.5px,transparent 1.5px);background-size:24px 24px;cursor:grab;user-select:none;-webkit-user-select:none}
+.diag-modal-body.grabbing{cursor:grabbing}
+.diag-modal-svg-wrap{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(1);transform-origin:center center;transition:transform .15s ease}
+.diag-modal-svg-wrap.no-trans{transition:none}
+.diag-modal-svg-wrap svg{display:block;max-width:none;width:auto;height:auto}
+.diag-modal-foot{padding:.7rem 1.5rem;border-top:1px solid var(--rule);background:var(--paper-mid);font-family:'Montserrat',sans-serif;font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint);display:flex;justify-content:space-between;align-items:center;flex-shrink:0;flex-wrap:wrap;gap:.5rem}
+.diag-zoom-level{color:var(--blue);font-weight:700;min-width:50px;text-align:center}
+
+/* CARDS */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem;margin:2rem 0}
+.card{background:#fff;border:1px solid var(--rule);border-radius:var(--rlg);padding:1.4rem;border-top:3px solid var(--blue);transition:box-shadow .25s,transform .25s;position:relative;overflow:hidden}
+.card:hover{box-shadow:0 8px 28px rgba(0,143,226,.14);transform:translateY(-3px)}
+.card-icon{font-size:22px;margin-bottom:10px;display:block}
+.card-title{font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;color:var(--navy);margin-bottom:7px}
+.card-desc{font-size:13px;color:var(--ink-muted);line-height:1.6}
+
+/* ACCORDION */
+.acc-item{border-bottom:1px solid var(--rule)}
+.acc-btn{width:100%;display:flex;align-items:center;justify-content:space-between;padding:1rem 0;background:none;border:none;cursor:pointer;text-align:left;gap:1rem}
+.acc-left{display:flex;align-items:center;gap:12px}
+.acc-num{font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;color:#fff;background:var(--blue);padding:3px 8px;border-radius:3px;white-space:nowrap}
+.acc-label{font-family:'Montserrat',sans-serif;font-size:14px;font-weight:700;color:var(--navy);text-align:left}
+.acc-chevron{font-size:18px;color:var(--blue);transition:transform .25s ease;flex-shrink:0}
+.acc-item.open .acc-chevron{transform:rotate(180deg)}
+.acc-body{display:none;padding:.25rem 0 1.5rem 2.75rem;font-size:14px;line-height:1.75;color:var(--ink-muted)}
+.acc-item.open .acc-body{display:block}
+.acc-body p{margin-bottom:.9rem}
+.acc-body p:last-child{margin-bottom:0}
+.acc-body strong{color:var(--navy);font-weight:700}
+
+/* TIMELINE */
+.timeline{position:relative;margin:2rem 0}
+.timeline::before{content:'';position:absolute;left:70px;top:0;bottom:0;width:2px;background:var(--rule)}
+.tl-item{display:flex;position:relative}
+.tl-phase{width:70px;flex-shrink:0;padding:1.1rem .9rem 1.1rem 0;text-align:right}
+.phase-badge{font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;color:#fff;background:var(--blue);padding:3px 7px;border-radius:3px;display:inline-block}
+.tl-dot{width:12px;height:12px;border-radius:50%;background:var(--blue);border:3px solid #fff;outline:2px solid var(--blue);position:absolute;left:65px;top:1.4rem}
+.tl-content{flex:1;padding:.9rem 0 1.75rem 2rem}
+.tl-title{font-family:'Montserrat',sans-serif;font-size:14px;font-weight:700;color:var(--navy);margin-bottom:3px}
+.tl-dur{font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;color:var(--blue);margin-bottom:7px;letter-spacing:.04em}
+.tl-desc{font-size:13.5px;color:var(--ink-muted);line-height:1.65}
+
+/* TABS */
+.tabs-wrap{margin:2rem 0}
+.tab-list{display:flex;border-bottom:2px solid var(--rule);overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.tab-list::-webkit-scrollbar{display:none}
+.tab-btn{font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-faint);background:none;border:none;cursor:pointer;padding:.75rem 1.25rem;white-space:nowrap;position:relative;transition:color .2s;flex-shrink:0}
+.tab-btn::after{content:'';position:absolute;bottom:-2px;left:0;right:0;height:2px;background:var(--blue);transform:scaleX(0);transition:transform .25s}
+.tab-btn.active{color:var(--blue)}
+.tab-btn.active::after{transform:scaleX(1)}
+.tab-panel{display:none;padding:1.75rem 0}
+.tab-panel.active{display:block;animation:fadeIn .35s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+/* COMPARISON TABLE */
+.comp-wrap{border:1px solid var(--rule);border-radius:var(--rlg);overflow:hidden;margin:1.5rem 0;overflow-x:auto;-webkit-overflow-scrolling:touch}
+table.comp-table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:480px}
+.comp-table thead{background:var(--navy)}
+.comp-table th{padding:10px 14px;text-align:left;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.6)}
+.comp-table td{padding:12px 14px;border-bottom:1px solid var(--rule);color:var(--ink-muted);vertical-align:top;line-height:1.5}
+.comp-table tr:last-child td{border-bottom:none}
+.comp-table tr:nth-child(even) td{background:var(--paper-mid)}
+.comp-table td:first-child{color:var(--navy);font-weight:700}
+
+/* RISK TABLE */
+.risk-wrap{border:1px solid var(--rule);border-radius:var(--rlg);overflow:hidden;margin:2rem 0;overflow-x:auto;-webkit-overflow-scrolling:touch}
+table.risk-table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:540px}
+.risk-table thead{background:var(--navy)}
+.risk-table th{padding:10px 14px;text-align:left;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.6)}
+.risk-table td{padding:12px 14px;border-bottom:1px solid var(--rule);color:var(--ink-muted);vertical-align:top;line-height:1.5}
+.risk-table tr:last-child td{border-bottom:none}
+.risk-table tr:nth-child(even) td{background:var(--paper-mid)}
+.risk-table td:first-child{color:var(--navy);font-weight:600}
+.badge{display:inline-block;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:3px;white-space:nowrap}
+.badge-high{background:var(--red-lt);color:var(--red)}
+.badge-med{background:var(--amber-lt);color:var(--amber)}
+.badge-low{background:var(--green-lt);color:var(--green)}
+
+/* RECO BOX */
+.reco-box{background:var(--blue);border-radius:var(--rxl);padding:2.25rem;margin:2.5rem 0;position:relative;overflow:hidden}
+.reco-box::before{content:'';position:absolute;right:-50px;top:-50px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.06)}
+.reco-box::after{content:'';position:absolute;right:40px;bottom:-80px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.04)}
+.reco-label{font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.6);margin-bottom:10px;position:relative;z-index:1}
+.reco-text{font-size:clamp(15px,2vw,1.15rem);line-height:1.6;color:#fff;position:relative;z-index:1}
+
+/* CODE BLOCK */
+.code-block{background:var(--navy);border-radius:var(--rlg);padding:1.25rem 1.5rem;margin:1.5rem 0;overflow-x:auto;-webkit-overflow-scrolling:touch;position:relative}
+.code-block pre{font-family:'Courier New',monospace;font-size:13px;line-height:1.65;color:#a8d8f0;white-space:pre}
+.code-lang{position:absolute;top:10px;right:12px;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.3)}
+
+/* PULL QUOTE */
+.pull-quote{margin:3rem 0;padding:2rem 0 2rem 2rem;border-left:3px solid var(--blue);position:relative}
+.pull-quote::before{content:'"';font-family:'Montserrat',sans-serif;font-size:7rem;color:var(--blue);opacity:.15;position:absolute;left:1rem;top:-1rem;line-height:1;font-weight:800;pointer-events:none}
+.pull-quote-text{font-family:'Montserrat',sans-serif;font-size:clamp(18px,2.6vw,1.55rem);font-weight:600;line-height:1.35;color:var(--navy);letter-spacing:-.015em;position:relative;z-index:1}
+.pull-quote-attr{margin-top:1rem;font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-faint)}
+
+/* MATURITY CURVE INTERACTIVE */
+.maturity-wrap{background:var(--paper-tint);border:1px solid var(--rule);border-radius:var(--rxl);padding:2rem;margin:2rem 0}
+.maturity-track{display:grid;grid-template-columns:repeat(5,1fr);gap:.5rem;margin-bottom:2rem;position:relative}
+.maturity-track::before{content:'';position:absolute;top:30px;left:5%;right:5%;height:2px;background:var(--rule);z-index:0}
+.maturity-stage{position:relative;z-index:1;cursor:pointer;text-align:center;background:none;border:none;font-family:inherit;padding:0;transition:transform .25s}
+.maturity-stage:hover{transform:translateY(-3px)}
+.stage-circle{width:60px;height:60px;border-radius:50%;background:#fff;border:2px solid var(--rule);margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-family:'Montserrat',sans-serif;font-size:18px;font-weight:800;color:var(--ink-faint);transition:all .3s}
+.maturity-stage.active .stage-circle{background:var(--blue);border-color:var(--blue);color:#fff;box-shadow:0 6px 20px rgba(0,143,226,.4),0 0 0 6px rgba(0,143,226,.12)}
+.maturity-stage.completed .stage-circle{background:var(--blue);border-color:var(--blue);color:#fff;opacity:.6}
+.stage-name{font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;color:var(--ink-muted);letter-spacing:.04em;text-transform:uppercase;line-height:1.3}
+.maturity-stage.active .stage-name{color:var(--navy)}
+.maturity-detail{background:#fff;border-radius:var(--rlg);padding:1.5rem;border-left:3px solid var(--blue);min-height:140px;animation:fadeIn .35s ease}
+.md-title{font-family:'Montserrat',sans-serif;font-size:1.1rem;font-weight:800;color:var(--navy);margin-bottom:.5rem}
+.md-status{font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:.85rem}
+.md-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:.5rem}
+.md-block{font-size:13px;line-height:1.6;color:var(--ink-muted)}
+.md-block strong{display:block;font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--navy);margin-bottom:4px}
+
+/* ARCHITECTURE STACK INTERACTIVE */
+.stack-wrap{background:var(--navy);border-radius:var(--rxl);padding:2rem;margin:2rem 0;position:relative;overflow:hidden}
+.stack-wrap::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 70% 50%,rgba(0,143,226,.1) 0%,transparent 70%);pointer-events:none}
+.stack-title{font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.4);margin-bottom:1.25rem;position:relative}
+.stack-grid{display:grid;grid-template-columns:1fr;gap:.45rem;position:relative}
+.stack-layer{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:var(--rlg);padding:.95rem 1.25rem;cursor:pointer;transition:all .25s;display:flex;align-items:center;gap:1rem;text-align:left;font-family:inherit;color:#fff}
+.stack-layer:hover{background:rgba(0,143,226,.18);border-color:var(--blue);transform:translateX(4px)}
+.stack-layer.active{background:var(--blue);border-color:var(--blue);box-shadow:0 8px 24px rgba(0,143,226,.4)}
+.stack-layer.input{background:rgba(255,255,255,.03);border-style:dashed}
+.stack-layer.input:hover{background:rgba(0,143,226,.12)}
+.sl-num{font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.1em;color:rgba(255,255,255,.4);min-width:24px}
+.stack-layer.active .sl-num{color:rgba(255,255,255,.7)}
+.sl-name{font-family:'Montserrat',sans-serif;font-size:13px;font-weight:700;flex:1;letter-spacing:-.01em}
+.sl-arrow{font-size:14px;color:rgba(255,255,255,.4);transition:transform .2s}
+.stack-layer:hover .sl-arrow,.stack-layer.active .sl-arrow{color:#fff;transform:translateX(3px)}
+.stack-connector{text-align:center;font-size:14px;color:rgba(255,255,255,.3);line-height:1;font-weight:300}
+.stack-detail{margin-top:1rem;background:rgba(255,255,255,.04);border-left:3px solid var(--blue);border-radius:0 var(--rlg) var(--rlg) 0;padding:1.25rem 1.5rem;color:rgba(255,255,255,.8);font-size:13.5px;line-height:1.7;position:relative;animation:fadeIn .3s ease}
+.stack-detail strong{color:var(--blue);font-family:'Montserrat',sans-serif;font-size:11px;letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:6px;font-weight:700}
+
+/* MANDATE CARDS */
+.mandate-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;margin:2rem 0}
+.mandate{background:#fff;border:1px solid var(--rule);border-radius:var(--rlg);padding:1.5rem;position:relative;overflow:hidden;transition:all .3s;cursor:pointer}
+.mandate::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--blue);transform:scaleX(0);transform-origin:left;transition:transform .35s ease}
+.mandate:hover::before{transform:scaleX(1)}
+.mandate:hover{box-shadow:0 12px 36px rgba(0,143,226,.13);transform:translateY(-4px);border-color:var(--blue)}
+.mandate-num{font-family:'Montserrat',sans-serif;font-size:9px;font-weight:800;letter-spacing:.15em;color:var(--blue);margin-bottom:.5rem;display:flex;align-items:center;gap:8px}
+.mandate-num::before{content:'';width:14px;height:2px;background:var(--blue);border-radius:2px}
+.mandate-title{font-family:'Montserrat',sans-serif;font-size:14px;font-weight:800;color:var(--navy);margin-bottom:.6rem;letter-spacing:-.01em;line-height:1.3}
+.mandate-desc{font-size:13.5px;line-height:1.65;color:var(--ink-muted)}
+
+/* DVC FLOW */
+.dvc-flow{margin:2rem 0;position:relative}
+.dvc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:.65rem}
+.dvc-phase{background:#fff;border:1px solid var(--rule);border-radius:var(--rlg);padding:1.25rem;position:relative;transition:all .25s;cursor:pointer}
+.dvc-phase:hover{border-color:var(--blue);box-shadow:0 8px 24px rgba(0,143,226,.12);transform:translateY(-2px)}
+.dvc-phase-num{font-family:'Montserrat',sans-serif;font-size:32px;font-weight:800;color:var(--blue);opacity:.18;line-height:1;margin-bottom:.5rem;letter-spacing:-.04em}
+.dvc-phase-name{font-family:'Montserrat',sans-serif;font-size:12px;font-weight:800;color:var(--navy);margin-bottom:.4rem;letter-spacing:-.01em;text-transform:uppercase}
+.dvc-phase-obj{font-size:12px;line-height:1.55;color:var(--ink-muted);margin-bottom:.7rem}
+.dvc-phase-val{font-family:'Montserrat',sans-serif;font-size:9.5px;font-weight:700;letter-spacing:.04em;color:var(--blue);padding-top:.6rem;border-top:1px dashed var(--rule);line-height:1.4}
+
+/* KPI CARDS */
+.kpi-cat{margin:1.5rem 0 .5rem}
+.kpi-cat-label{font-family:'Montserrat',sans-serif;font-size:9px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--blue);margin-bottom:.75rem;display:flex;align-items:center;gap:10px}
+.kpi-cat-label::after{content:'';flex:1;height:1px;background:var(--rule)}
+.kpi-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:.75rem}
+.kpi-row{background:var(--paper-mid);border-radius:var(--rlg);padding:1rem 1.25rem;border-left:3px solid var(--blue);transition:transform .2s}
+.kpi-row:hover{transform:translateX(3px)}
+.kpi-name{font-family:'Montserrat',sans-serif;font-size:12px;font-weight:700;color:var(--navy);margin-bottom:4px;letter-spacing:-.01em}
+.kpi-desc{font-size:12.5px;line-height:1.55;color:var(--ink-muted);margin-bottom:6px}
+.kpi-target{font-family:'Montserrat',sans-serif;font-size:10.5px;font-weight:700;color:var(--blue);letter-spacing:-.005em}
+.kpi-target::before{content:'→ ';color:var(--ink-faint)}
+
+/* INTELLIGENCE PARTICLES (decorative for AI section) */
+.particles-bg{position:absolute;inset:0;pointer-events:none;overflow:hidden;opacity:.4}
+
+/* CTA / DOWNLOAD */
+.fab{position:fixed;bottom:2rem;right:2rem;background:var(--blue);color:#fff;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;border:none;border-radius:50px;padding:.85rem 1.4rem;cursor:pointer;box-shadow:0 8px 24px rgba(0,143,226,.4);z-index:50;transition:transform .2s,background .2s}
+.fab:hover{background:var(--blue-dk);transform:translateY(-2px)}
+
+/* ACKNOWLEDGEMENT */
+.ack{background:var(--paper-mid);padding:2rem;font-size:13px;line-height:1.7;color:var(--ink-muted);text-align:center;border-top:1px solid var(--rule)}
+
+/* FOOTER */
+footer{background:var(--navy);color:rgba(255,255,255,.7);padding:3rem 0 1.5rem}
+.footer-top{display:flex;justify-content:space-between;gap:2rem;flex-wrap:wrap;margin-bottom:2rem;padding-bottom:2rem;border-bottom:1px solid rgba(255,255,255,.1)}
+.footer-logo{display:flex;align-items:center;gap:12px;margin-bottom:.75rem}
+.footer-tag{font-family:'Montserrat',sans-serif;font-size:12px;font-weight:600;color:var(--blue);letter-spacing:.02em}
+.footer-meta{font-size:12px;line-height:1.7;color:rgba(255,255,255,.5);max-width:480px}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem}
+.footer-copy{font-size:11px;color:rgba(255,255,255,.4);font-family:'Montserrat',sans-serif;letter-spacing:.04em}
+.footer-links{display:flex;gap:1.5rem;flex-wrap:wrap}
+.footer-links a{font-family:'Montserrat',sans-serif;font-size:11px;font-weight:600;color:rgba(255,255,255,.55);text-decoration:none;letter-spacing:.04em;transition:color .2s}
+.footer-links a:hover{color:var(--blue)}
+
+/* RESPONSIVE */
+@media (max-width:900px){
+  .nav-links,.nav-cta,.nav-doc{display:none}
+  .hamburger{display:flex}
+  nav{padding:0 1.25rem}
+  .maturity-track{grid-template-columns:repeat(5,1fr);gap:.25rem}
+  .stage-circle{width:42px;height:42px;font-size:13px}
+  .stage-name{font-size:9px}
+  .md-grid{grid-template-columns:1fr}
+  .maturity-track::before{top:21px}
+}
+@media (max-width:600px){
+  .section{padding:3rem 0}
+  .container,.container-wide{padding:0 1.25rem}
+  #hero{padding:3.5rem 0 3rem}
+  .hero-meta{gap:1.25rem}
+  .timeline::before{left:50px}
+  .tl-phase{width:50px}
+  .tl-dot{left:45px}
+  .tl-content{padding-left:1.5rem}
+  .acc-body{padding-left:0}
+  .fab{bottom:1.25rem;right:1.25rem;padding:.7rem 1.1rem;font-size:10px}
+  .diag-modal-inner{max-width:100vw;max-height:100vh;border-radius:0}
+}
+
+@media print{
+  nav,#prog,.fab,#diagModal,.hamburger,.mobile-menu{display:none!important}
+  main{padding-top:0}
+  .section{padding:1.5rem 0;page-break-inside:avoid}
+  .fi{opacity:1!important;transform:none!important}
+  body{font-size:11pt}
+  .arch-diagram,.maturity-wrap,.stack-wrap{break-inside:avoid}
+  a{color:inherit;text-decoration:none}
+}
+</style>
+</head>
+<body>
+
+<div id="prog"></div>
+
+<nav>
+  <a href="#hero" class="nav-left">
+    <div class="nine-dots">
+      <span></span><span></span><span></span>
+      <span></span><span></span><span></span>
+      <span></span><span></span><span></span>
+    </div>
+    <span class="nav-word">Nine</span>
+    <span class="nav-sep"></span>
+    <span class="nav-doc">Data Intelligence Platform</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#intro">01 Intro</a></li>
+    <li><a href="#maturity">02 Maturity</a></li>
+    <li><a href="#friction">03 Friction</a></li>
+    <li><a href="#target">04 Target</a></li>
+    <li><a href="#dvc">05 Value Chain</a></li>
+    <li><a href="#mandates">06 Mandates</a></li>
+    <li><a href="#kpis">07 KPIs</a></li>
+    <li><a href="#roadmap">08 Roadmap</a></li>
+  </ul>
+  <a href="#roadmap" class="nav-cta">View Roadmap</a>
+  <button class="hamburger" id="ham" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<div class="mobile-menu" id="mob">
+  <a href="#intro" onclick="closeMob()">01 Introduction</a>
+  <a href="#maturity" onclick="closeMob()">02 Maturity Curve</a>
+  <a href="#friction" onclick="closeMob()">03 Architectural Friction</a>
+  <a href="#target" onclick="closeMob()">04 Target Architecture</a>
+  <a href="#dvc" onclick="closeMob()">05 Data Value Chain</a>
+  <a href="#mandates" onclick="closeMob()">06 Strategic Mandates</a>
+  <a href="#kpis" onclick="closeMob()">07 Operational KPIs</a>
+  <a href="#roadmap" onclick="closeMob()">08 Roadmap</a>
+</div>
+
+<main>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-dots-bg"></div>
+  <div class="container">
+    <p class="hero-eyebrow fi">Enterprise Architecture · Whitepaper</p>
+    <h1 class="hero-title fi">Architecting for the era of <em>autonomous AI</em> ecosystems.</h1>
+    <p class="hero-sub fi">A strategic blueprint for modernising Nine's data infrastructure, eliminating operational friction, and scaling the compounding economic yield of intelligence across the enterprise.</p>
+    <div class="hero-tags fi">
+      <span class="hero-tag">Data Lakehouse</span>
+      <span class="hero-tag">Open Table Formats</span>
+      <span class="hero-tag">Semantic Layer</span>
+      <span class="hero-tag">AI Readiness</span>
+      <span class="hero-tag">Federated Stewardship</span>
+    </div>
+    <div class="hero-meta fi">
+      <div class="meta-item"><span class="meta-label">Authored by</span><span class="meta-val">Nine Enterprise Architecture</span></div>
+      <div class="meta-item"><span class="meta-label">Audience</span><span class="meta-val">CTO · Data · Platform Leaders</span></div>
+      <div class="meta-item"><span class="meta-label">Version</span><span class="meta-val">3.0 — Internal Reference</span></div>
+      <div class="meta-item"><span class="meta-label">Classification</span><span class="meta-val">Internal — Confidential</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- TOC -->
+<section id="toc">
+  <div class="container">
+    <p class="toc-label">Contents</p>
+    <div class="toc-grid">
+      <a href="#intro" class="toc-item"><span class="toc-num">01</span><span class="toc-title">The Paradigm Shift</span></a>
+      <a href="#maturity" class="toc-item"><span class="toc-num">02</span><span class="toc-title">Maturity Curve</span></a>
+      <a href="#friction" class="toc-item"><span class="toc-num">03</span><span class="toc-title">Architectural Friction</span></a>
+      <a href="#target" class="toc-item"><span class="toc-num">04</span><span class="toc-title">Target Architecture</span></a>
+      <a href="#dvc" class="toc-item"><span class="toc-num">05</span><span class="toc-title">Data Value Chain</span></a>
+      <a href="#mandates" class="toc-item"><span class="toc-num">06</span><span class="toc-title">Strategic Mandates</span></a>
+      <a href="#kpis" class="toc-item"><span class="toc-num">07</span><span class="toc-title">Operational KPIs</span></a>
+      <a href="#roadmap" class="toc-item"><span class="toc-num">08</span><span class="toc-title">Roadmap &amp; Risks</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- EXECUTIVE SUMMARY / 01 INTRO -->
+<section id="intro" class="section">
+  <div class="container">
+    <div class="sec-hdr fi">
+      <span class="sec-num">01</span>
+      <h2 class="sec-title">The Paradigm Shift in Enterprise Data Strategy</h2>
+      <div class="sec-rule"></div>
+    </div>
+
+    <p class="lead fi">Data is frequently heralded as the enterprise's most valuable asset. Yet the architectures designed to harness it — siloed warehouses, unmanaged lakes, and fragmented operational pipelines — are failing to meet the demands of the modern, AI-driven enterprise.</p>
+
+    <h3 class="sub-h fi">From data-driven to intelligence-driven</h3>
+    <div class="prose fi">
+      <p>For the past two decades, corporate data strategies focused on becoming "data-driven." In practice, this manifested as descriptive statistics displayed via centralised business intelligence dashboards. Valuable for historical reporting — yet inherently bottlenecked: every loop relies on human interpretation, human intervention, and human execution.</p>
+      <p>In an era defined by rapid market shifts and the emergence of Generative AI and agentic workflows, being merely "data-driven" is no longer a competitive advantage; it is an operational liability. The modern enterprise must transition toward becoming <strong style="color:var(--navy)">intelligence-driven</strong> — codifying organisational knowledge, automating complex decisioning paths, and feeding high-fidelity, real-time data directly into machine learning models and AI agents.</p>
+    </div>
+
+    <div class="pull-quote fi">
+      <p class="pull-quote-text">Being "data-driven" is no longer a competitive advantage. It is an operational liability.</p>
+      <p class="pull-quote-attr">— Executive Summary · Section 1</p>
+    </div>
+
+    <div class="prose fi">
+      <p>This whitepaper outlines a strategic blueprint for the implementation of a next-generation <strong style="color:var(--navy)">Data Intelligence Platform</strong>. By converging the data warehousing paradigm with the flexibility of an open data lakehouse architecture, this framework provides a comprehensive roadmap to eliminate systemic operational friction, establish federated data stewardship, and institutionalise a semantic layer optimised for both human analysts and artificial intelligence agents.</p>
+      <p>The ultimate objective is to accelerate organisational velocity, transition from reactive reporting to autonomous optimisation, and maximise the compounding economic yield of Nine's data assets.</p>
+    </div>
+
+    <div class="callout callout-info fi">
+      <span class="callout-icon">ℹ</span>
+      <div class="callout-body">
+        <strong>Why now</strong>
+        Three converging forces — the maturation of open table formats, the emergence of agentic LLM workflows, and Nine's cloud migration programme — create a once-in-a-decade window to consolidate fragmented data estates onto a single, governed, AI-ready platform.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- METRICS STRIP -->
+<div class="metrics-strip">
+  <div class="container-wide">
+    <div class="metrics-grid">
+      <div class="metric-item fi">
+        <div class="metric-num">60–70%</div>
+        <div class="metric-label">Data engineering capacity<span class="metric-unit">spent on remediation</span></div>
+      </div>
+      <div class="metric-item fi">
+        <div class="metric-num">≥ 99.5%</div>
+        <div class="metric-label">Schema contract adherence<span class="metric-unit">platform target</span></div>
+      </div>
+      <div class="metric-item fi">
+        <div class="metric-num">&lt; 200ms</div>
+        <div class="metric-label">Serving layer latency<span class="metric-unit">p99 — feature retrieval</span></div>
+      </div>
+      <div class="metric-item fi">
+        <div class="metric-num">100%</div>
+        <div class="metric-label">Semantic routing adherence<span class="metric-unit">for AI and BI queries</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 02 MATURITY CURVE -->
+<section id="maturity" class="section section-alt">
+  <div class="container">
+    <div class="sec-hdr fi">
+      <span class="sec-num">02</span>
+      <h2 class="sec-title">The Data Intelligence Maturity Curve</h2>
+      <div class="sec-rule"></div>
+    </div>
+
+    <p class="lead fi">To successfully navigate this transformation, Nine must honestly evaluate its current standing along the Data Intelligence Maturity Curve. Most traditional enterprises remain anchored in the early stages — suffering from high operational latency and limited intelligence yield.</p>
+
+    <p style="font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:1rem" class="fi">Interactive — click any stage to explore</p>
+
+    <div class="maturity-wrap fi">
+      <div class="maturity-track" role="tablist" aria-label="Maturity stages">
+        <button class="maturity-stage active" onclick="setMaturity(1,this)" data-stage="1" aria-selected="true">
+          <div class="stage-circle">1</div>
+          <div class="stage-name">Reactive</div>
+        </button>
+        <button class="maturity-stage" onclick="setMaturity(2,this)" data-stage="2">
+          <div class="stage-circle">2</div>
+          <div class="stage-name">Informed</div>
+        </button>
+        <button class="maturity-stage" onclick="setMaturity(3,this)" data-stage="3">
+          <div class="stage-circle">3</div>
+          <div class="stage-name">Predictive</div>
+        </button>
+        <button class="maturity-stage" onclick="setMaturity(4,this)" data-stage="4">
+          <div class="stage-circle">4</div>
+          <div class="stage-name">Automated</div>
+        </button>
+        <button class="maturity-stage" onclick="setMaturity(5,this)" data-stage="5">
+          <div class="stage-circle">5</div>
+          <div class="stage-name">Transformative</div>
+        </button>
+      </div>
+
+      <div class="maturity-detail" id="mdetail">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+
+    <div class="callout callout-warn fi">
+      <span class="callout-icon">⚠</span>
+      <div class="callout-body">
+        <strong>Nine's current position — honest assessment</strong>
+        Most domains operate between Stage 2 (Informed) and Stage 3 (Predictive). Customer and Audience domains show pockets of Stage 4 capability via programmatic advertising, but Finance, Operations, and Editorial remain firmly in Stage 2. The strategic mandate is to lift the whole estate to Stage 4 by 2028, with selected high-leverage domains reaching Stage 5.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 ARCHITECTURAL FRICTION -->
+<section id="friction" class="section">
+  <div class="container">
+    <div class="sec-hdr fi">
+      <span class="sec-num">03</span>
+      <h2 class="sec-title">Current Operational Challenges &amp; Architectural Friction</h2>
+      <div class="sec-rule"></div>
+    </div>
+
+    <p class="lead fi">As enterprises scale, legacy architectures generate hidden structural costs — what we call <em>architectural friction</em> — that constrain corporate velocity. Addressing these bottlenecks is a prerequisite for achieving Stage 4+ maturity.</p>
+
+    <div class="arch-diagram zoomable fi" data-title="Sources of Architectural Friction">
+      <span class="diagram-zoom-hint">⤢ Click to zoom</span>
+      <svg viewBox="0 0 720 320" xmlns="http://www.w3.org/2000/svg" font-family="'Open Sans',sans-serif" role="img" aria-label="Diagram showing three sources of architectural friction: downstream remediation tax, metric drift, and bespoke pipeline proliferation">
+        <defs>
+          <marker id="ar-friction" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L0,8 L8,4 z" fill="#c0392b"/></marker>
+          <linearGradient id="frictionBg" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#fdecea"/>
+            <stop offset="100%" stop-color="#fff"/>
+          </linearGradient>
+        </defs>
+        <text x="360" y="22" text-anchor="middle" font-size="10" font-family="'Montserrat',sans-serif" fill="#9898b8" letter-spacing="1.8" font-weight="700">THREE COMPOUNDING SOURCES OF FRICTION</text>
+
+        <!-- Source systems row -->
+        <g>
+          <rect x="40" y="46" width="120" height="38" rx="4" fill="#070720"/>
+          <text x="100" y="63" text-anchor="middle" font-size="10" fill="#fff" font-weight="600">Transaction Engine</text>
+          <text x="100" y="76" text-anchor="middle" font-size="9" fill="rgba(255,255,255,.55)">Source system</text>
+
+          <rect x="180" y="46" width="120" height="38" rx="4" fill="#070720"/>
+          <text x="240" y="63" text-anchor="middle" font-size="10" fill="#fff" font-weight="600">CRM</text>
+          <text x="240" y="76" text-anchor="middle" font-size="9" fill="rgba(255,255,255,.55)">Source system</text>
+
+          <rect x="320" y="46" width="120" height="38" rx="4" fill="#070720"/>
+          <text x="380" y="63" text-anchor="middle" font-size="10" fill="#fff" font-weight="600">Web / App Events</text>
+          <text x="380" y="76" text-anchor="middle" font-size="9" fill="rgba(255,255,255,.55)">Source system</text>
+
+          <rect x="460" y="46" width="120" height="38" rx="4" fill="#070720"/>
+          <text x="520" y="63" text-anchor="middle" font-size="10" fill="#fff" font-weight="600">Ad Servers</text>
+          <text x="520" y="76" text-anchor="middle" font-size="9" fill="rgba(255,255,255,.55)">Source system</text>
+        </g>
+
+        <!-- Friction 1 -->
+        <g>
+          <rect x="40" y="120" width="200" height="180" rx="6" fill="url(#frictionBg)" stroke="#c0392b" stroke-width="1.5"/>
+          <text x="140" y="142" text-anchor="middle" font-size="9" font-family="'Montserrat',sans-serif" fill="#c0392b" letter-spacing="1.2" font-weight="700">FRICTION 01</text>
+          <text x="140" y="162" text-anchor="middle" font-size="12" font-family="'Montserrat',sans-serif" fill="#070720" font-weight="800">Remediation Tax</text>
+          <text x="140" y="183" text-anchor="middle" font-size="20" font-family="'Montserrat',sans-serif" fill="#c0392b" font-weight="800">60–70%</text>
+          <text x="140" y="198" text-anchor="middle" font-size="9" fill="#5a5a80">of engineer capacity</text>
+          <text x="140" y="220" text-anchor="middle" font-size="10" fill="#2e2e50" font-weight="600">spent cleaning,</text>
+          <text x="140" y="235" text-anchor="middle" font-size="10" fill="#2e2e50" font-weight="600">deduplicating, parsing</text>
+          <text x="140" y="265" text-anchor="middle" font-size="9" fill="#5a5a80" font-style="italic">"Sources emit data without</text>
+          <text x="140" y="278" text-anchor="middle" font-size="9" fill="#5a5a80" font-style="italic">regard for consumers"</text>
+        </g>
+
+        <!-- Friction 2 -->
+        <g>
+          <rect x="260" y="120" width="200" height="180" rx="6" fill="url(#frictionBg)" stroke="#c0392b" stroke-width="1.5"/>
+          <text x="360" y="142" text-anchor="middle" font-size="9" font-family="'Montserrat',sans-serif" fill="#c0392b" letter-spacing="1.2" font-weight="700">FRICTION 02</text>
+          <text x="360" y="162" text-anchor="middle" font-size="12" font-family="'Montserrat',sans-serif" fill="#070720" font-weight="800">Metric Drift</text>
+          <text x="360" y="186" text-anchor="middle" font-size="11" fill="#c0392b" font-weight="700">"Active Users" ≠ "Active Users"</text>
+          <line x1="295" y1="200" x2="425" y2="200" stroke="#dde8f5" stroke-width="1" stroke-dasharray="3,3"/>
+          <text x="360" y="218" text-anchor="middle" font-size="10" fill="#2e2e50" font-weight="600">Conflicting numbers</text>
+          <text x="360" y="232" text-anchor="middle" font-size="10" fill="#2e2e50" font-weight="600">from competing dashboards</text>
+          <text x="360" y="262" text-anchor="middle" font-size="9" fill="#5a5a80" font-style="italic">→ leadership stalls,</text>
+          <text x="360" y="275" text-anchor="middle" font-size="9" fill="#5a5a80" font-style="italic">discovery paralysis sets in</text>
+        </g>
+
+        <!-- Friction 3 -->
+        <g>
+          <rect x="480" y="120" width="200" height="180" rx="6" fill="url(#frictionBg)" stroke="#c0392b" stroke-width="1.5"/>
+          <text x="580" y="142" text-anchor="middle" font-size="9" font-family="'Montserrat',sans-serif" fill="#c0392b" letter-spacing="1.2" font-weight="700">FRICTION 03</text>
+          <text x="580" y="162" text-anchor="middle" font-size="12" font-family="'Montserrat',sans-serif" fill="#070720" font-weight="800">Pipeline Proliferation</text>
+          <g transform="translate(515,180)">
+            <rect x="0" y="0" width="16" height="3" fill="#c0392b" opacity=".7"/>
+            <rect x="0" y="6" width="22" height="3" fill="#c0392b" opacity=".8"/>
+            <rect x="0" y="12" width="12" height="3" fill="#c0392b" opacity=".6"/>
+            <rect x="0" y="18" width="28" height="3" fill="#c0392b" opacity=".7"/>
+            <rect x="0" y="24" width="18" height="3" fill="#c0392b" opacity=".8"/>
+            <rect x="0" y="30" width="24" height="3" fill="#c0392b" opacity=".7"/>
+            <rect x="38" y="0" width="20" height="3" fill="#c0392b" opacity=".7"/>
+            <rect x="38" y="6" width="14" height="3" fill="#c0392b" opacity=".6"/>
+            <rect x="38" y="12" width="26" height="3" fill="#c0392b" opacity=".8"/>
+            <rect x="38" y="18" width="18" height="3" fill="#c0392b" opacity=".7"/>
+            <rect x="38" y="24" width="22" height="3" fill="#c0392b" opacity=".8"/>
+            <rect x="38" y="30" width="16" height="3" fill="#c0392b" opacity=".7"/>
+            <rect x="80" y="0" width="22" height="3" fill="#c0392b" opacity=".7"/>
+            <rect x="80" y="6" width="18" height="3" fill="#c0392b" opacity=".6"/>
+            <rect x="80" y="12" width="26" height="3" fill="#c0392b" opacity=".8"/>
+            <rect x="80" y="18" width="14" height="3" fill="#c0392b" opacity=".7"/>
+            <rect x="80" y="24" width="22" height="3" fill="#c0392b" opacity=".8"/>
+            <rect x="80" y="30" width="20" height="3" fill="#c0392b" opacity=".7"/>
+          </g>
+          <text x="580" y="232" text-anchor="middle" font-size="10" fill="#2e2e50" font-weight="600">Redundant compute,</text>
+          <text x="580" y="246" text-anchor="middle" font-size="10" fill="#2e2e50" font-weight="600">storage, governance surface</text>
+          <text x="580" y="270" text-anchor="middle" font-size="9" fill="#5a5a80" font-style="italic">→ TCO escalates</text>
+          <text x="580" y="283" text-anchor="middle" font-size="9" fill="#5a5a80" font-style="italic">linearly with team count</text>
+        </g>
+
+        <!-- Friction arrows from sources -->
+        <line x1="100" y1="84" x2="100" y2="115" stroke="#c0392b" stroke-width="1.5" marker-end="url(#ar-friction)"/>
+        <line x1="240" y1="84" x2="240" y2="115" stroke="#c0392b" stroke-width="1.5" marker-end="url(#ar-friction)"/>
+        <line x1="380" y1="84" x2="380" y2="115" stroke="#c0392b" stroke-width="1.5" marker-end="url(#ar-friction)"/>
+        <line x1="520" y1="84" x2="520" y2="115" stroke="#c0392b" stroke-width="1.5" marker-end="url(#ar-friction)"/>
+      </svg>
+    </div>
+
+    <h3 class="sub-h fi">The three categories of friction</h3>
+
+    <div class="acc-item open fi">
+      <button class="acc-btn" onclick="toggleAcc(this)" aria-expanded="true">
+        <div class="acc-left"><span class="acc-num">3.1</span><span class="acc-label">The Downstream Remediation Tax</span></div>
+        <span class="acc-chevron">⌃</span>
+      </button>
+      <div class="acc-body">
+        <p>In fragmented architectures, upstream source systems — transaction engines, CRM tools, web applications — emit data without accounting for how it will be consumed downstream. Consequently, data engineering teams spend an estimated <strong>60–70% of their operational capacity</strong> building custom cleaning, deduplication, and parsing pipelines.</p>
+        <p>This <strong>remediation tax</strong> delays time-to-insight, introduces critical points of failure, and creates a regenerating problem: every new source system adds N new pipelines, where N is the number of downstream consumers.</p>
+      </div>
+    </div>
+
+    <div class="acc-item fi">
+      <button class="acc-btn" onclick="toggleAcc(this)" aria-expanded="false">
+        <div class="acc-left"><span class="acc-num">3.2</span><span class="acc-label">Metric Drift and Discovery Paralysis</span></div>
+        <span class="acc-chevron">⌃</span>
+      </button>
+      <div class="acc-body">
+        <p>Without a centralised business logic layer, different business units independently define core operational metrics — <em>Active Users</em>, <em>Net Revenue</em>, <em>Customer Lifetime Value</em>. Over time, these definitions diverge, producing <strong>metric drift</strong>.</p>
+        <p>When leadership is presented with conflicting numbers from competing dashboards, decision-making stalls — what we call <strong>discovery paralysis</strong>. Time-to-decision becomes the binding constraint, and confidence in the analytics function erodes asymmetrically faster than it can be rebuilt.</p>
+      </div>
+    </div>
+
+    <div class="acc-item fi">
+      <button class="acc-btn" onclick="toggleAcc(this)" aria-expanded="false">
+        <div class="acc-left"><span class="acc-num">3.3</span><span class="acc-label">Bespoke Pipeline Proliferation</span></div>
+        <span class="acc-chevron">⌃</span>
+      </button>
+      <div class="acc-body">
+        <p>When individual product or analytics teams build isolated, end-to-end pipelines for niche use cases, the enterprise suffers from <strong>pipeline proliferation</strong>. This fragmentation dramatically escalates Total Cost of Ownership through redundant storage, duplicated compute workloads, and an unmanageable surface area for security and data compliance governance.</p>
+        <p>The pattern is recursive: each new team builds the stack from scratch because reusing another team's pipeline is harder than starting over — and so the proliferation compounds.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 04 TARGET ARCHITECTURE -->
+<section id="target" class="section section-alt">
+  <div class="container">
+    <div class="sec-hdr fi">
+      <span class="sec-num">04</span>
+      <h2 class="sec-title">Target Architecture: The Unified Data Lakehouse</h2>
+      <div class="sec-rule"></div>
+    </div>
+
+    <p class="lead fi">To overcome architectural friction, Nine must converge its data operations onto a single, unified <em>Data Lakehouse Framework</em> — combining the cost-effective scalability of an open data lake with the ACID guarantees, schema enforcement, and high-performance querying of a traditional warehouse.</p>
+
+    <p style="font-family:'Montserrat',sans-serif;font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--ink-faint);margin-bottom:1rem" class="fi">Interactive — click any layer of the stack</p>
+
+    <div class="stack-wrap fi">
+      <p class="stack-title">The Unified Lakehouse — Layered View</p>
+      <div class="stack-grid">
+        <button class="stack-layer" onclick="setLayer('activation',this)">
+          <span class="sl-num">L5</span>
+          <span class="sl-name">Data Activation &amp; AI Layer</span>
+          <span class="sl-arrow">›</span>
+        </button>
+        <div class="stack-connector">⇅</div>
+        <button class="stack-layer active" onclick="setLayer('semantic',this)">
+          <span class="sl-num">L4</span>
+          <span class="sl-name">Unified Semantic Layer</span>
+          <span class="sl-arrow">›</span>
+        </button>
+        <div class="stack-connector">⇅</div>
+        <button class="stack-layer" onclick="setLayer('catalog',this)">
+          <span class="sl-num">L3</span>
+          <span class="sl-name">Open Table Format &amp; Governance Catalog</span>
+          <span class="sl-arrow">›</span>
+        </button>
+        <div class="stack-connector">⇅</div>
+        <button class="stack-layer" onclick="setLayer('storage',this)">
+          <span class="sl-num">L2</span>
+          <span class="sl-name">Cloud Object Storage Layer</span>
+          <span class="sl-arrow">›</span>
+        </button>
+        <div class="stack-connector">⇡</div>
+        <button class="stack-layer input" onclick="setLayer('ingest',this)">
+          <span class="sl-num">L1</span>
+          <span class="sl-name">Batch Ingestion &amp; Real-Time Event Streams</span>
+          <span class="sl-arrow">›</span>
+        </button>
+      </div>
+
+      <div class="stack-detail" id="layerDetail">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+
+    <h3 class="sub-h fi">Key architectural characteristics</h3>
+    <div class="card-grid fi">
+      <div class="card">
+        <span class="card-icon">⚖</span>
+        <div class="card-title">Decoupled Storage &amp; Compute</div>
+        <div class="card-desc">Storage scales cost-effectively on object storage; compute is dynamically provisioned per workload — eliminating the rigid coupling that defines legacy warehouses.</div>
+      </div>
+      <div class="card">
+        <span class="card-icon">⌬</span>
+        <div class="card-title">Open Table Formats</div>
+        <div class="card-desc">Apache Iceberg or Delta as the standard. Prevents vendor lock-in; allows specialised engines (SQL, Spark, ML) to read the same physical files — zero-copy architecture.</div>
+      </div>
+      <div class="card">
+        <span class="card-icon">⛬</span>
+        <div class="card-title">Unified Governance</div>
+        <div class="card-desc">Security, row- and column-level access, and lineage are enforced at the catalog — not fractured across BI tools or cloud accounts.</div>
+      </div>
+      <div class="card">
+        <span class="card-icon">⊛</span>
+        <div class="card-title">Machine-Readable Semantics</div>
+        <div class="card-desc">A semantic layer exposed via API enables LLMs and AI agents to query Nine's data reliably — without hallucinating on undocumented schemas.</div>
+      </div>
+    </div>
+
+    <!-- Reference architecture SVG -->
+    <h3 class="sub-h fi">Reference architecture — Nine target state</h3>
+    <div class="arch-diagram zoomable fi" data-title="Nine Target Architecture — Unified Data Intelligence Platform">
+      <span class="diagram-zoom-hint">⤢ Click to zoom</span>
+      <svg viewBox="0 0 720 460" xmlns="http://www.w3.org/2000/svg" font-family="'Open Sans',sans-serif" role="img" aria-label="Reference architecture diagram for Nine's unified data intelligence platform">
+        <defs>
+          <marker id="ar-tgt" markerWidth="7" markerHeight="7" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L7,3 z" fill="#008fe2"/></marker>
+          <linearGradient id="actGrad" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stop-color="#008fe2"/>
+            <stop offset="100%" stop-color="#6d4aff"/>
+          </linearGradient>
+        </defs>
+        <text x="360" y="22" text-anchor="middle" font-size="10" font-family="'Montserrat',sans-serif" fill="#9898b8" letter-spacing="1.8" font-weight="700">NINE DATA INTELLIGENCE PLATFORM — TARGET STATE</text>
+
+        <!-- L5 Activation -->
+        <rect x="40" y="40" width="640" height="58" rx="6" fill="url(#actGrad)"/>
+        <text x="60" y="62" font-size="10" font-family="'Montserrat',sans-serif" fill="rgba(255,255,255,.85)" letter-spacing="1.4" font-weight="700">L5 — ACTIVATION &amp; AI</text>
+        <g transform="translate(60,72)">
+          <rect x="0" y="0" width="115" height="20" rx="3" fill="rgba(255,255,255,.18)"/>
+          <text x="57" y="14" text-anchor="middle" font-size="10" fill="#fff" font-weight="600">BI Dashboards</text>
+          <rect x="125" y="0" width="115" height="20" rx="3" fill="rgba(255,255,255,.18)"/>
+          <text x="182" y="14" text-anchor="middle" font-size="10" fill="#fff" font-weight="600">Reverse ETL</text>
+          <rect x="250" y="0" width="135" height="20" rx="3" fill="rgba(255,255,255,.18)"/>
+          <text x="317" y="14" text-anchor="middle" font-size="10" fill="#fff" font-weight="600">ML Inference Pipelines</text>
+          <rect x="395" y="0" width="135" height="20" rx="3" fill="rgba(255,255,255,.28)" stroke="#fff" stroke-width="1"/>
+          <text x="462" y="14" text-anchor="middle" font-size="10" fill="#fff" font-weight="700">Autonomous AI Agents</text>
+        </g>
+
+        <text x="360" y="113" text-anchor="middle" font-size="14" fill="#9898b8">⇅</text>
+
+        <!-- L4 Semantic -->
+        <rect x="40" y="120" width="640" height="58" rx="6" fill="#070720"/>
+        <text x="60" y="142" font-size="10" font-family="'Montserrat',sans-serif" fill="rgba(255,255,255,.55)" letter-spacing="1.4" font-weight="700">L4 — UNIFIED SEMANTIC LAYER</text>
+        <text x="60" y="162" font-size="11" fill="#fff" font-weight="600">Centralised Business Logic</text>
+        <text x="280" y="162" font-size="11" fill="#fff" font-weight="600">Universal Metric Definitions</text>
+        <text x="520" y="162" font-size="11" fill="#fff" font-weight="600">Machine-Readable APIs</text>
+
+        <text x="360" y="193" text-anchor="middle" font-size="14" fill="#9898b8">⇅</text>
+
+        <!-- L3 Catalog -->
+        <rect x="40" y="200" width="640" height="58" rx="6" fill="#e0f2fd" stroke="#008fe2" stroke-width="1.5"/>
+        <text x="60" y="222" font-size="10" font-family="'Montserrat',sans-serif" fill="#005a94" letter-spacing="1.4" font-weight="700">L3 — OPEN TABLE FORMAT &amp; GOVERNANCE CATALOG</text>
+        <text x="60" y="241" font-size="11" fill="#070720" font-weight="600">Apache Iceberg / Delta</text>
+        <text x="240" y="241" font-size="11" fill="#070720" font-weight="600">ACID Compliance</text>
+        <text x="380" y="241" font-size="11" fill="#070720" font-weight="600">Row/Column Access Controls</text>
+        <text x="380" y="252" font-size="9" fill="#5a5a80">&amp; end-to-end lineage</text>
+
+        <text x="360" y="273" text-anchor="middle" font-size="14" fill="#9898b8">⇅</text>
+
+        <!-- L2 Storage -->
+        <rect x="40" y="280" width="640" height="58" rx="6" fill="#f4f7fb" stroke="#dde8f5" stroke-width="1.5"/>
+        <text x="60" y="302" font-size="10" font-family="'Montserrat',sans-serif" fill="#5a5a80" letter-spacing="1.4" font-weight="700">L2 — CLOUD OBJECT STORAGE</text>
+        <text x="60" y="321" font-size="11" fill="#2e2e50" font-weight="600">Immutable object storage</text>
+        <text x="270" y="321" font-size="11" fill="#2e2e50" font-weight="600">Parquet</text>
+        <text x="350" y="321" font-size="11" fill="#2e2e50" font-weight="600">ORC</text>
+        <text x="400" y="321" font-size="11" fill="#2e2e50" font-weight="600">Avro</text>
+        <text x="465" y="321" font-size="11" fill="#5a5a80">— optimised physical file layouts</text>
+
+        <text x="360" y="353" text-anchor="middle" font-size="14" fill="#9898b8">⇡</text>
+
+        <!-- L1 Ingest -->
+        <rect x="40" y="360" width="310" height="80" rx="6" fill="#fff" stroke="#dde8f5" stroke-width="1.5" stroke-dasharray="6,3"/>
+        <text x="55" y="382" font-size="9" font-family="'Montserrat',sans-serif" fill="#008fe2" letter-spacing="1.4" font-weight="700">L1A — BATCH INGESTION</text>
+        <text x="55" y="403" font-size="11" fill="#070720" font-weight="600">Scheduled Orchestration</text>
+        <text x="55" y="419" font-size="10" fill="#5a5a80">Airflow · dbt · Dagster</text>
+        <text x="55" y="432" font-size="9" fill="#9898b8" font-style="italic">Historical backfills, daily aggregates</text>
+
+        <rect x="370" y="360" width="310" height="80" rx="6" fill="#fff" stroke="#008fe2" stroke-width="1.5" stroke-dasharray="6,3"/>
+        <text x="385" y="382" font-size="9" font-family="'Montserrat',sans-serif" fill="#008fe2" letter-spacing="1.4" font-weight="700">L1B — REAL-TIME STREAMS</text>
+        <text x="385" y="403" font-size="11" fill="#070720" font-weight="600">Continuous Stream Processing</text>
+        <text x="385" y="419" font-size="10" fill="#5a5a80">Kafka · Flink · Pub/Sub</text>
+        <text x="385" y="432" font-size="9" fill="#9898b8" font-style="italic">Operational events, sub-second decisioning</text>
+      </svg>
+    </div>
+
+    <div class="callout callout-ok fi">
+      <span class="callout-icon">✓</span>
+      <div class="callout-body">
+        <strong>Zero-copy in practice</strong>
+        Because all engines read the same Iceberg tables on object storage, the analytics team can run a Spark feature engineering job, the BI team can hit the same data with a SQL query engine, and an ML inference service can fetch features — concurrently, with no data duplication. The semantic layer ensures every consumer sees the same definitions.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 DATA VALUE CHAIN -->
+<section id="dvc" class="section">
+  <div class="container">
+    <div class="sec-hdr fi">
+      <span class="sec-num">05</span>
+      <h2 class="sec-title">The Data Value Chain Blueprint</h2>
+      <div class="sec-rule"></div>
+    </div>
+
+    <p class="lead fi">Data must be viewed as an evolutionary asset that increases in <em>liquidity</em> and <em>value</em> as it progresses through a highly structured Data Value Chain (DVC) — four phases that turn raw telemetry into autonomous business action.</p>
+
+    <div class="dvc-flow fi">
+      <div class="dvc-grid">
+        <div class="dvc-phase">
+          <div class="dvc-phase-num">01</div>
+          <div class="dvc-phase-name">Collect &amp; Validate</div>
+          <div class="dvc-phase-obj">Capture immutable raw telemetry at the point of origin. Schema-on-write validation, real-time ingestion streams, zero-loss logging frameworks.</div>
+          <div class="dvc-phase-val">↳ Establishes the tamper-proof "single source of truth"</div>
+        </div>
+        <div class="dvc-phase">
+          <div class="dvc-phase-num">02</div>
+          <div class="dvc-phase-name">Transform &amp; Enrich</div>
+          <div class="dvc-phase-obj">Synthesise atomised data points into clean, modular, reusable base entities. Automated deduplication, structural normalisation, identity stitching.</div>
+          <div class="dvc-phase-val">↳ Eliminates the downstream remediation tax</div>
+        </div>
+        <div class="dvc-phase">
+          <div class="dvc-phase-num">03</div>
+          <div class="dvc-phase-name">Analyse &amp; Train</div>
+          <div class="dvc-phase-obj">Extract predictive insights and run analytics workflows. Feature store registration, ML model training, exploratory SQL analytics.</div>
+          <div class="dvc-phase-val">↳ Converts history into forward-looking intelligence</div>
+        </div>
+        <div class="dvc-phase">
+          <div class="dvc-phase-num">04</div>
+          <div class="dvc-phase-name">Activate &amp; Optimise</div>
+          <div class="dvc-phase-obj">Feed refined insights back into operational applications and autonomous systems. High-velocity serving, reverse ETL, real-time APIs.</div>
+          <div class="dvc-phase-val">↳ Drives financial performance &amp; autonomous decisions</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pull-quote fi">
+      <p class="pull-quote-text">Each phase compounds. Investment in phase 1 quality pays back exponentially at phase 4.</p>
+      <p class="pull-quote-attr">— Principle of compounding intelligence yield</p>
+    </div>
+  </div>
+</section>
+
+<!-- 06 STRATEGIC MANDATES -->
+<section id="mandates" class="section section-alt">
+  <div class="container">
+    <div class="sec-hdr fi">
+      <span class="sec-num">06</span>
+      <h2 class="sec-title">Six Strategic Mandates for AI Readiness</h2>
+      <div class="sec-rule"></div>
+    </div>
+
+    <p class="lead fi">Six core mandates shift operational responsibility, standardise technical implementations, and prepare Nine's data estate for consumption by advanced AI frameworks. Each mandate is non-negotiable for reaching Stage 4+ maturity.</p>
+
+    <div class="mandate-grid fi">
+      <div class="mandate">
+        <div class="mandate-num">Mandate 01</div>
+        <div class="mandate-title">Implement an Open Lakehouse Standard</div>
+        <div class="mandate-desc">Move away from proprietary, vendor-locked data formats. Ingestion pipelines write to cost-effective object storage using open-source table formats like Apache Iceberg — guaranteeing data is instantly accessible to AI modelling environments without expensive extraction.</div>
+      </div>
+      <div class="mandate">
+        <div class="mandate-num">Mandate 02</div>
+        <div class="mandate-title">Enforce Federated Data Stewardship</div>
+        <div class="mandate-desc">Shift data-quality responsibility "left" — directly to the source platform teams that generate the data. Source systems must treat their outputs as public-facing software products; schema changes must not break downstream analytics. Data contracts are enforced at the integration boundary.</div>
+      </div>
+      <div class="mandate">
+        <div class="mandate-num">Mandate 03</div>
+        <div class="mandate-title">Consolidate Around Modular Base Models</div>
+        <div class="mandate-desc">Data engineering teams must cease creating single-purpose, bespoke pipelines. Architecture focuses on a robust shared layer of modular core entities — unified consumer table, standardised product catalog, universal transaction ledger. All peripheral products inherit from these trusted bases.</div>
+      </div>
+      <div class="mandate">
+        <div class="mandate-num">Mandate 04</div>
+        <div class="mandate-title">Establish a Global Unified Identity Framework</div>
+        <div class="mandate-desc">For Nine's multi-brand, multi-channel estate, deploy a deterministic and probabilistic identity resolution engine that consolidates fragmented touchpoints into a centralised, anonymised Global Unified Identity — enabling precise personalisation, attribution, and robust privacy compliance.</div>
+      </div>
+      <div class="mandate">
+        <div class="mandate-num">Mandate 05</div>
+        <div class="mandate-title">Institutionalise a Machine-Readable Semantic Layer</div>
+        <div class="mandate-desc">Extract business logic from individual BI tools and centralise it within an enterprise semantic layer. Translate technical schemas into clear business definitions — and crucially, expose them via API so LLMs and AI agents can query Nine's data reliably without hallucinating on structural codes.</div>
+      </div>
+      <div class="mandate">
+        <div class="mandate-num">Mandate 06</div>
+        <div class="mandate-title">Deploy High-Velocity Serving &amp; Feature Stores</div>
+        <div class="mandate-desc">Predictive applications and AI agents require sub-second data access. Incorporate an Online Feature Store paired with low-latency caching — ensuring features trained on historical data are identical to those retrieved during real-time inference (offline/online parity).</div>
+      </div>
+    </div>
+
+    <div class="callout callout-info fi">
+      <span class="callout-icon">ℹ</span>
+      <div class="callout-body">
+        <strong>Order of execution matters</strong>
+        Mandates 1 and 2 are foundational — every later mandate depends on them. Attempting Mandates 3–6 on a fragmented, vendor-locked estate creates a brittle façade over the same underlying friction. The roadmap (Section 8) sequences these explicitly.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 07 KPIs -->
+<section id="kpis" class="section">
+  <div class="container">
+    <div class="sec-hdr fi">
+      <span class="sec-num">07</span>
+      <h2 class="sec-title">Operational Metrics &amp; Key Performance Indicators</h2>
+      <div class="sec-rule"></div>
+    </div>
+
+    <p class="lead fi">Progress and operational efficiency within the upgraded Data Intelligence Platform must be measured by quantifiable, performance-driven KPIs across three categories. Targets are deliberately ambitious — incremental improvement is insufficient at this stage of maturity.</p>
+
+    <div class="kpi-cat fi">
+      <div class="kpi-cat-label">7.1 — Engineering Velocity</div>
+      <div class="kpi-list">
+        <div class="kpi-row">
+          <div class="kpi-name">Data Product Delivery Time</div>
+          <div class="kpi-desc">Average time to provision a new analytical dataset from ingestion request to production availability.</div>
+          <div class="kpi-target">Target: reduction from weeks to hours via modular base models</div>
+        </div>
+        <div class="kpi-row">
+          <div class="kpi-name">Pipeline Redundancy Ratio</div>
+          <div class="kpi-desc">Total number of duplicated or overlapping ingest pipelines across the enterprise.</div>
+          <div class="kpi-target">Target: zero duplication across core domains</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="kpi-cat fi">
+      <div class="kpi-cat-label">7.2 — Data Fidelity &amp; Governance</div>
+      <div class="kpi-list">
+        <div class="kpi-row">
+          <div class="kpi-name">Schema Contract Adherence</div>
+          <div class="kpi-desc">Percentage of ingested data packets that strictly match registered metadata contracts at the ingestion gateway.</div>
+          <div class="kpi-target">Target: ≥ 99.5%</div>
+        </div>
+        <div class="kpi-row">
+          <div class="kpi-name">Data Lineage Coverage</div>
+          <div class="kpi-desc">Proportion of active production datasets with automated, end-to-end lineage visualisation and tracing enabled.</div>
+          <div class="kpi-target">Target: 100% coverage</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="kpi-cat fi">
+      <div class="kpi-cat-label">7.3 — Activation &amp; System Performance</div>
+      <div class="kpi-list">
+        <div class="kpi-row">
+          <div class="kpi-name">Serving Layer Latency</div>
+          <div class="kpi-desc">p99 execution response time for operational applications and real-time ML feature retrieval calls.</div>
+          <div class="kpi-target">Target: sub-200 milliseconds</div>
+        </div>
+        <div class="kpi-row">
+          <div class="kpi-name">Semantic Layer Coverage</div>
+          <div class="kpi-desc">Percentage of standardised business reports and AI queries routed through the verified semantic framework versus direct database access.</div>
+          <div class="kpi-target">Target: 100% routing adherence</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 08 ROADMAP -->
+<section id="roadmap" class="section section-alt">
+  <div class="container">
+    <div class="sec-hdr fi">
+      <span class="sec-num">08</span>
+      <h2 class="sec-title">Nine Transformation Roadmap</h2>
+      <div class="sec-rule"></div>
+    </div>
+    <p class="lead fi">Applying the principles of this whitepaper to Nine's transformation programme. Three horizons — <em>foundation</em>, <em>consolidation</em>, and <em>autonomy</em> — building incrementally on proven layers before committing to the next.</p>
+
+    <div class="timeline fi">
+      <div class="tl-item">
+        <div class="tl-phase"><span class="phase-badge">H1</span></div>
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-title">Standardise on Apache Iceberg &amp; Data Contracts</div>
+          <div class="tl-dur">Months 1–6 · Foundation</div>
+          <div class="tl-desc">Adopt Apache Iceberg as the canonical open table format for all new ingestion streams. Stand up the central governance catalog (lineage, RBAC, audit). Define and implement data contract protocols on the top 10 critical source systems. Migrate the Customer domain as proof-of-concept.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-phase"><span class="phase-badge">H1</span></div>
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-title">Platform Foundation &amp; Federated Stewardship</div>
+          <div class="tl-dur">Months 3–9 · Foundation</div>
+          <div class="tl-desc">Establish the Data Platform domain. Embed Platform engineers in source-system teams to shift quality ownership "left." Deploy lineage instrumentation across all production pipelines. Stand up the Online Feature Store on a low-latency caching tier and validate offline/online parity.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-phase"><span class="phase-badge">H2</span></div>
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-title">Deprecate Bespoke Pipelines · Launch Modular Base Models</div>
+          <div class="tl-dur">Months 9–18 · Consolidation</div>
+          <div class="tl-desc">Identify and consolidate the 200+ duplicated pipelines across the enterprise. Publish the canonical Consumer, Product, and Transaction base models — every downstream analytics product inherits from these. Decommission redundant warehouses as base-model coverage hits 80%.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-phase"><span class="phase-badge">H2</span></div>
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-title">Global Unified Identity Framework</div>
+          <div class="tl-dur">Months 12–20 · Consolidation</div>
+          <div class="tl-desc">Deploy deterministic + probabilistic identity resolution across all Nine brands and channels. Consolidate fragmented user touchpoints into a single anonymised Global ID. Wire the framework into the Customer base model — enabling precise cross-platform attribution and personalisation.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-phase"><span class="phase-badge">H3</span></div>
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-title">Layer the Machine-Readable Semantic Framework</div>
+          <div class="tl-dur">Months 18–30 · Autonomy</div>
+          <div class="tl-desc">Centralise business logic in the semantic layer — every metric definition lives here, versioned and reviewed. Expose the semantic layer via API. Migrate all corporate BI through the semantic gateway. Validate AI-agent queries against the same gateway — no direct table access permitted.</div>
+        </div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-phase"><span class="phase-badge">H3</span></div>
+        <div class="tl-dot"></div>
+        <div class="tl-content">
+          <div class="tl-title">Production AI Agents &amp; Autonomous Workflows</div>
+          <div class="tl-dur">Months 24–36 · Autonomy</div>
+          <div class="tl-desc">Deploy production AI agents across high-leverage workflows — programmatic monetisation, content recommendation, dynamic editorial scheduling. Realise the projected uplift in audience engagement and ad yield. Reach Stage 4 maturity across the estate; Stage 5 in priority domains.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="reco-box fi">
+      <p class="reco-label">Summary recommendation</p>
+      <p class="reco-text">Adopt the Unified Data Lakehouse as Nine's strategic data platform and execute the six mandates in sequence — starting with Apache Iceberg standardisation and federated stewardship in H1 2025. Because every later phase compounds on the foundations, sequencing matters far more than speed. This is the path of least risk and the greatest compounding intelligence yield over the three-year horizon.</p>
+    </div>
+
+    <h3 class="sub-h fi">Key adoption risks</h3>
+    <div class="risk-wrap fi">
+      <table class="risk-table">
+        <thead><tr><th>Risk</th><th>Rating</th><th>Mitigation</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Schema contract violations — upstream teams resist shift-left ownership</td>
+            <td><span class="badge badge-high">High</span></td>
+            <td>Executive mandate from CTO/CDO. Embedded Platform engineers in source teams for 6 months. Automated CI gates reject non-compliant schemas at the integration boundary.</td>
+          </tr>
+          <tr>
+            <td>Semantic-layer drift — definitions diverge between BI tools and the central layer</td>
+            <td><span class="badge badge-high">High</span></td>
+            <td>Hard deprecation of direct table access. All BI tools migrated to query through the semantic gateway only. Quarterly metric council reviews and approves all definition changes.</td>
+          </tr>
+          <tr>
+            <td>Skills gap — teams unfamiliar with Iceberg, lakehouse ops, feature-store engineering</td>
+            <td><span class="badge badge-med">Medium</span></td>
+            <td>18-month upskilling programme. Embedded Platform engineers in domain teams during H1/H2. Targeted hiring for 5 senior data platform engineers and 3 ML platform specialists.</td>
+          </tr>
+          <tr>
+            <td>Vendor lock-in via cloud-native managed services</td>
+            <td><span class="badge badge-med">Medium</span></td>
+            <td>Prefer open Iceberg/Delta APIs for storage contracts. Use managed services only where they accelerate the migration without becoming load-bearing dependencies. Quarterly portability review.</td>
+          </tr>
+          <tr>
+            <td>Identity-framework privacy compliance — global regulations diverge</td>
+            <td><span class="badge badge-med">Medium</span></td>
+            <td>Privacy-by-design review of the identity engine. Anonymisation enforced at the framework boundary. Quarterly privacy audit and automated compliance dashboards.</td>
+          </tr>
+          <tr>
+            <td>AI agents hallucinate on undocumented schemas</td>
+            <td><span class="badge badge-low">Low</span></td>
+            <td>Agents only query through the semantic layer. Direct database access blocked at the network layer for production AI services. Semantic gateway validates and rejects out-of-contract queries.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<div class="ack">
+  Nine acknowledges the traditional custodians of Country, and the connections of First Nations people to the lands and waterways on which we work and live. We pay our respects to elders past and present, and we commit to listening, learning and acting on our journey towards reconciliation.
+</div>
+
+<footer>
+  <div class="container">
+    <div class="footer-top">
+      <div>
+        <div class="footer-logo">
+          <div class="nine-dots">
+            <span></span><span></span><span></span>
+            <span></span><span></span><span></span>
+            <span></span><span></span><span></span>
+          </div>
+          <span class="nav-word" style="font-size:18px">Nine</span>
+        </div>
+        <p class="footer-tag">Australia belongs here.</p>
+      </div>
+      <p class="footer-meta">Strategic blueprint authored by Nine Enterprise Architecture for internal review by the CTO Office, Data Platform leadership, and the Architecture Review Board. Distribution restricted to named stakeholders. Questions: arb@nine.com.au</p>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copy">© 2026 Nine Entertainment Company · Internal — Confidential</span>
+      <div class="footer-links">
+        <a href="#">ARB Process</a>
+        <a href="#">Architecture Wiki</a>
+        <a href="#">Data Platform Runbook</a>
+        <a href="https://www.nineforbrands.com.au" target="_blank" rel="noopener">Nine for Brands</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</main>
+
+<button class="fab" onclick="window.print()" aria-label="Export as PDF">↓ Export PDF</button>
+
+<!-- DIAGRAM MODAL -->
+<div id="diagModal" role="dialog" aria-modal="true" aria-labelledby="diagTitle">
+  <div class="diag-modal-inner">
+    <div class="diag-modal-head">
+      <div class="diag-modal-title" id="diagTitle">Diagram</div>
+      <div class="diag-modal-ctrls">
+        <button class="diag-ctrl" id="zoomOut" aria-label="Zoom out">−</button>
+        <button class="diag-ctrl" id="zoomReset" aria-label="Reset zoom" title="Reset">⊙</button>
+        <button class="diag-ctrl" id="zoomIn" aria-label="Zoom in">+</button>
+        <button class="diag-ctrl diag-ctrl-close" id="diagClose" aria-label="Close">✕</button>
+      </div>
+    </div>
+    <div class="diag-modal-body" id="diagBody">
+      <div class="diag-modal-svg-wrap" id="diagSvgWrap"></div>
+    </div>
+    <div class="diag-modal-foot">
+      <span>Drag to pan · Scroll to zoom · Esc to close</span>
+      <span class="diag-zoom-level" id="zoomLvl">100%</span>
+    </div>
+  </div>
+</div>
+
+
+<script>
+/* ============================================================
+   PROGRESS BAR
+============================================================ */
+window.addEventListener('scroll',()=>{
+  const e=document.documentElement;
+  document.getElementById('prog').style.width=(e.scrollTop/(e.scrollHeight-e.clientHeight)*100)+'%';
+},{passive:true});
+
+/* ============================================================
+   FADE-IN ON SCROLL
+============================================================ */
+const obs=new IntersectionObserver((entries)=>{
+  entries.forEach((e,i)=>{
+    if(e.isIntersecting){
+      setTimeout(()=>e.target.classList.add('vis'),Math.min(i*50,300));
+      obs.unobserve(e.target);
+    }
+  });
+},{threshold:.08,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.fi').forEach(el=>obs.observe(el));
+
+/* ============================================================
+   ACTIVE NAV TRACKING
+============================================================ */
+const secs=document.querySelectorAll('section[id]');
+const links=document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll',()=>{
+  let cur='';
+  secs.forEach(s=>{if(window.scrollY>=s.offsetTop-90)cur=s.id});
+  links.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+cur));
+},{passive:true});
+
+/* ============================================================
+   MOBILE HAMBURGER
+============================================================ */
+const ham=document.getElementById('ham'),mob=document.getElementById('mob');
+ham.addEventListener('click',()=>{ham.classList.toggle('open');mob.classList.toggle('open')});
+function closeMob(){ham.classList.remove('open');mob.classList.remove('open')}
+
+/* ============================================================
+   ACCORDION
+============================================================ */
+function toggleAcc(btn){
+  const item=btn.closest('.acc-item');
+  item.classList.toggle('open');
+  btn.setAttribute('aria-expanded',item.classList.contains('open'));
+}
+
+/* ============================================================
+   MATURITY CURVE INTERACTIVE
+============================================================ */
+const maturityData={
+  1:{name:'Reactive',status:'Pre-baseline · highest operational latency',char:'Highly siloed data environments, ad-hoc spreadsheet reporting, manual data extracts, and minimal standardised governance.',op:'Backward-looking; entirely dependent on manual intervention to identify and rectify business anomalies. Time-to-insight measured in days or weeks.'},
+  2:{name:'Informed',status:'Current baseline for most enterprises',char:'Centralised data warehousing, established corporate KPIs, and widespread deployment of descriptive BI dashboards across business units.',op:'Data is visible — but passive. Every action loop still requires human synthesis and interpretation before any business response can be initiated.'},
+  3:{name:'Predictive',status:'Operational logic begins to look forward',char:'Integrated data science environments, early adoption of predictive ML algorithms (churn models, propensity scoring), and automated anomaly detection.',op:'Operational logic shifts from "What happened?" to "What is likely to happen next?" Forecasting becomes a routine input to business decisions.'},
+  4:{name:'Automated',status:'Closed-loop operational pipelines',char:'Data insights automatically trigger system actions without a human-in-the-loop — e.g., programmatic bidding, real-time dynamic inventory adjustments, automated content recommendation.',op:'High operational efficiency; low execution latency across primary business vectors. Humans supervise outcomes rather than approve every action.'},
+  5:{name:'Transformative',status:'The AI-Ready State · the target',char:'A fully unified Data Intelligence Platform serving a generalised semantic framework. AI agents autonomously orchestrate cross-functional workflows and optimise outcomes in sub-second intervals.',op:'Autonomous operation. Intellectual capital is digitised and leverageable at scale; humans set strategy, agents execute. This is the destination.'}
+};
+
+function setMaturity(stage,el){
+  document.querySelectorAll('.maturity-stage').forEach((b,i)=>{
+    b.classList.remove('active','completed');
+    b.setAttribute('aria-selected','false');
+    if(i+1<stage)b.classList.add('completed');
+  });
+  el.classList.add('active');
+  el.setAttribute('aria-selected','true');
+  const d=maturityData[stage];
+  document.getElementById('mdetail').innerHTML=`
+    <div class="md-title">Stage ${stage} · ${d.name}</div>
+    <div class="md-status">${d.status}</div>
+    <div class="md-grid">
+      <div class="md-block"><strong>Characteristics</strong>${d.char}</div>
+      <div class="md-block"><strong>Operational status</strong>${d.op}</div>
+    </div>`;
+}
+// Initialise
+setMaturity(1,document.querySelector('.maturity-stage'));
+
+/* ============================================================
+   ARCHITECTURE STACK INTERACTIVE
+============================================================ */
+const layerData={
+  activation:{name:'L5 — Activation & AI Layer',body:'<strong>What lives here</strong>BI dashboards, reverse ETL syncs that push intelligence back into operational systems, ML inference pipelines for real-time scoring, and autonomous AI agents that orchestrate cross-functional workflows. This is the layer where data <em>becomes action</em> — the only layer business users and AI agents interact with directly.'},
+  semantic:{name:'L4 — Unified Semantic Layer',body:'<strong>What lives here</strong>Centralised business logic, universal metric definitions ("Active Users", "Net Revenue", "CLV" defined once), and crucially — machine-readable semantic schemas exposed via API. LLMs and AI agents query through this layer, never directly against tables. Eliminates metric drift permanently and enables reliable AI querying without hallucinations.'},
+  catalog:{name:'L3 — Open Table Format & Governance Catalog',body:'<strong>What lives here</strong>Apache Iceberg or Delta Lake as the table format. ACID transactions over object storage. Centralised row- and column-level access controls. End-to-end data lineage. Multiple specialised engines (SQL, Spark, ML training) read the same physical files concurrently — zero-copy.'},
+  storage:{name:'L2 — Cloud Object Storage Layer',body:'<strong>What lives here</strong>Immutable cloud object storage as the foundation. Optimised physical file layouts using Parquet, ORC, and Avro. Decoupled from compute — storage scales independently and cost-effectively. The substrate that makes everything above possible.'},
+  ingest:{name:'L1 — Batch Ingestion & Real-Time Event Streams',body:'<strong>What flows in here</strong>Two complementary ingestion paths. <em>Batch</em> via scheduled orchestration (Airflow, dbt) for historical backfills and aggregates. <em>Real-time streams</em> via Kafka/Flink for operational events requiring sub-second processing. Schema contracts enforced at this boundary — data must conform to register specifications before entering the platform.'}
+};
+
+function setLayer(key,el){
+  document.querySelectorAll('.stack-layer').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  const d=layerData[key];
+  document.getElementById('layerDetail').innerHTML=`<strong>${d.name}</strong>${d.body}`;
+}
+// Initialise with semantic layer
+setLayer('semantic',document.querySelectorAll('.stack-layer')[1]);
+
+/* ============================================================
+   DIAGRAM MODAL — zoom + pan
+============================================================ */
+const diagModal=document.getElementById('diagModal');
+const diagBody=document.getElementById('diagBody');
+const diagSvgWrap=document.getElementById('diagSvgWrap');
+const diagTitle=document.getElementById('diagTitle');
+const zoomLvl=document.getElementById('zoomLvl');
+let zoom=1, panX=0, panY=0;
+let isDragging=false, dragStartX=0, dragStartY=0, dragOrigX=0, dragOrigY=0;
+
+function applyTransform(animate=true){
+  diagSvgWrap.classList.toggle('no-trans',!animate);
+  diagSvgWrap.style.transform=`translate(calc(-50% + ${panX}px), calc(-50% + ${panY}px)) scale(${zoom})`;
+  zoomLvl.textContent=Math.round(zoom*100)+'%';
+}
+
+function openDiag(svgEl,title){
+  diagSvgWrap.innerHTML='';
+  const clone=svgEl.cloneNode(true);
+  // Make it fill the modal viewport — preserve aspect ratio via viewBox
+  clone.removeAttribute('width');
+  clone.removeAttribute('height');
+  clone.style.width='min(85vw, 1100px)';
+  clone.style.height='auto';
+  clone.style.maxHeight='65vh';
+  clone.style.display='block';
+  diagSvgWrap.appendChild(clone);
+  diagTitle.textContent=title||'Diagram';
+  zoom=1;panX=0;panY=0;
+  applyTransform(false);
+  diagModal.classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeDiag(){
+  diagModal.classList.remove('open');
+  document.body.style.overflow='';
+}
+
+// Attach click handlers to zoomable diagrams
+document.querySelectorAll('.arch-diagram.zoomable').forEach(d=>{
+  d.addEventListener('click',(e)=>{
+    // ignore if user is interacting with something inside
+    const svg=d.querySelector('svg');
+    if(svg)openDiag(svg,d.dataset.title||'Diagram');
+  });
+  // keyboard accessibility
+  d.setAttribute('tabindex','0');
+  d.setAttribute('role','button');
+  d.setAttribute('aria-label','Open '+(d.dataset.title||'diagram')+' in fullscreen viewer');
+  d.addEventListener('keydown',(e)=>{
+    if(e.key==='Enter'||e.key===' '){e.preventDefault();d.click();}
+  });
+});
+
+// Zoom controls
+document.getElementById('zoomIn').addEventListener('click',()=>{zoom=Math.min(zoom*1.25,4);applyTransform();});
+document.getElementById('zoomOut').addEventListener('click',()=>{zoom=Math.max(zoom/1.25,0.5);applyTransform();});
+document.getElementById('zoomReset').addEventListener('click',()=>{zoom=1;panX=0;panY=0;applyTransform();});
+document.getElementById('diagClose').addEventListener('click',closeDiag);
+
+// Click outside to close
+diagModal.addEventListener('click',(e)=>{
+  if(e.target===diagModal)closeDiag();
+});
+
+// Keyboard
+document.addEventListener('keydown',(e)=>{
+  if(!diagModal.classList.contains('open'))return;
+  if(e.key==='Escape')closeDiag();
+  else if(e.key==='+'||e.key==='='){zoom=Math.min(zoom*1.25,4);applyTransform();}
+  else if(e.key==='-'){zoom=Math.max(zoom/1.25,0.5);applyTransform();}
+  else if(e.key==='0'){zoom=1;panX=0;panY=0;applyTransform();}
+});
+
+// Scroll-wheel zoom
+diagBody.addEventListener('wheel',(e)=>{
+  if(!diagModal.classList.contains('open'))return;
+  e.preventDefault();
+  const delta=e.deltaY<0?1.12:1/1.12;
+  zoom=Math.max(0.5,Math.min(4,zoom*delta));
+  applyTransform(false);
+},{passive:false});
+
+// Pan via drag
+diagBody.addEventListener('mousedown',(e)=>{
+  isDragging=true;
+  dragStartX=e.clientX;dragStartY=e.clientY;
+  dragOrigX=panX;dragOrigY=panY;
+  diagBody.classList.add('grabbing');
+});
+window.addEventListener('mousemove',(e)=>{
+  if(!isDragging)return;
+  panX=dragOrigX+(e.clientX-dragStartX);
+  panY=dragOrigY+(e.clientY-dragStartY);
+  applyTransform(false);
+});
+window.addEventListener('mouseup',()=>{
+  if(isDragging){isDragging=false;diagBody.classList.remove('grabbing');}
+});
+
+// Touch pan
+diagBody.addEventListener('touchstart',(e)=>{
+  if(e.touches.length!==1)return;
+  isDragging=true;
+  dragStartX=e.touches[0].clientX;dragStartY=e.touches[0].clientY;
+  dragOrigX=panX;dragOrigY=panY;
+},{passive:true});
+diagBody.addEventListener('touchmove',(e)=>{
+  if(!isDragging||e.touches.length!==1)return;
+  panX=dragOrigX+(e.touches[0].clientX-dragStartX);
+  panY=dragOrigY+(e.touches[0].clientY-dragStartY);
+  applyTransform(false);
+},{passive:true});
+diagBody.addEventListener('touchend',()=>{isDragging=false});
+
+// Pinch-zoom on touch
+let pinchStart=0,pinchZoom=1;
+diagBody.addEventListener('touchstart',(e)=>{
+  if(e.touches.length===2){
+    const dx=e.touches[0].clientX-e.touches[1].clientX;
+    const dy=e.touches[0].clientY-e.touches[1].clientY;
+    pinchStart=Math.hypot(dx,dy);
+    pinchZoom=zoom;
+    isDragging=false;
+  }
+},{passive:true});
+diagBody.addEventListener('touchmove',(e)=>{
+  if(e.touches.length===2){
+    const dx=e.touches[0].clientX-e.touches[1].clientX;
+    const dy=e.touches[0].clientY-e.touches[1].clientY;
+    const d=Math.hypot(dx,dy);
+    if(pinchStart>0){
+      zoom=Math.max(0.5,Math.min(4,pinchZoom*(d/pinchStart)));
+      applyTransform(false);
+    }
+  }
+},{passive:true});
+</script>
+</body>
+</html>
